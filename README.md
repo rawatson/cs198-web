@@ -1,6 +1,8 @@
 lair-queue
 ==========
 
+[![Build Status](https://travis-ci.org/cs198/lair-queue.svg)](https://travis-ci.org/cs198/lair-queue)
+
 TODO: add more information about the project, contributing, workflow...
 
 This is the LaIR queue web app's implementation. It is a statically served frontend web application
