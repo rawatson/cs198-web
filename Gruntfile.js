@@ -5,6 +5,14 @@ module.exports = function(grunt) {
         connect: {
             server: {
                 options: {
+                    middleware: function(connect, options, middlewares) {
+                        var modRewrite = require('connect-modrewrite');
+                        var rules = [
+                            '!\\.html|\\.js|\\.css|\\.svg|\\.jp(e?)g|\\.png|\\.gif$ /index.html'
+                        ];
+                        middlewares.unshift(modRewrite(rules));
+                        return middlewares;
+                    },
                     base: 'public',
                     livereload: true,
                     port: 8000
