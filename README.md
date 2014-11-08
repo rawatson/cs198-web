@@ -18,13 +18,33 @@ $ npm start
 
 Open your browser, go to `localhost:8000`. Voila!
 
-## Run tests
+## Check your build
+
+This command runs the tests and linter:
+
+```bash
+$ npm run check
+```
+
+If it does, and you've written tests for your contributions, you should be good to open a PR!
+
+### Run tests only
+
+This runs all the tests in the test suite, using Jest:
 
 ```bash
 $ npm test
 ```
 
-## Write tests
+### Run lint only
+
+This runs a modified version of `jshint` to work with `.jsx` files:
+
+```bash
+$ npm run lint
+```
+
+## How to write tests
 
 TODO: move to wiki
 
