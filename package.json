@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "description": "React application running the CS198 Lair Queue",
   "scripts": {
-    "test": "node node_modules/jest-cli/bin/jest.js",
+    "test": "./node_modules/jest-cli/bin/jest.js",
     "start": "./node_modules/grunt-cli/bin/grunt serve",
     "lint": "./node_modules/jsxhint/cli.js src/",
-    "build": "npm run-script lint && npm test"
+    "check": "npm test && npm run lint"
   },
   "author": "Omar Diab",
   "dependencies": {
