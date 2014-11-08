@@ -4,7 +4,7 @@
   "description": "React application running the CS198 Lair Queue",
   "scripts": {
     "test": "node node_modules/jest-cli/bin/jest.js",
-    "start": "grunt serve"
+    "start": "./node_modules/grunt-cli/bin/grunt serve"
   },
   "author": "Omar Diab",
   "dependencies": {
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "connect-modrewrite": "^0.7.9",
+    "grunt-cli": "^0.1.13",
     "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-watch": "^0.6.1",
     "jest-cli": "^0.1.18",
