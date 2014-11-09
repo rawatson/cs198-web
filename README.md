@@ -13,7 +13,7 @@ written in [React](http://facebook.github.io/react/).
 Run this command (without the $):
 
 ```bash
-$ npm start
+$ grunt serve
 ```
 
 Open your browser, go to `localhost:8000`. Voila!
@@ -23,7 +23,7 @@ Open your browser, go to `localhost:8000`. Voila!
 This command runs the tests and linter:
 
 ```bash
-$ npm run check
+$ grunt check
 ```
 
 If it does, and you've written tests for your contributions, you should be good to open a PR!
@@ -33,7 +33,7 @@ If it does, and you've written tests for your contributions, you should be good 
 This runs all the tests in the test suite, using Jest:
 
 ```bash
-$ npm test
+$ grunt test
 ```
 
 ### Run lint only
@@ -41,7 +41,7 @@ $ npm test
 This runs a modified version of `jshint` to work with `.jsx` files:
 
 ```bash
-$ npm run lint
+$ grunt lint
 ```
 
 ## How to write tests
