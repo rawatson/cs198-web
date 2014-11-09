@@ -52,6 +52,19 @@ module.exports = function(grunt) {
         'browserify'
     ]);
 
+    grunt.registerTask('test', [
+        'jest'
+    ]);
+
+    grunt.registerTask('lint', [
+        'jshint'
+    ]);
+
+    grunt.registerTask('check', [
+        'test',
+        'lint'
+    ]);
+
     grunt.registerTask('serve', [
         'browserify',
         'connect:server',
