@@ -8,9 +8,19 @@ TODO: add more information about the project, contributing, workflow...
 This is the LaIR queue web app's implementation. It is a statically served frontend web application
 written in [React](http://facebook.github.io/react/).
 
+## Setup your developer environment.
+
+Make sure you have `node` and `npm` installed. Then, run (without the $):
+
+```bash
+$ npm install -g grunt
+```
+
+This will install the Grunt tool, which is useful for running a number of useful commands below.
+
 ## Run dev server
 
-Run this command (without the $):
+Run this command:
 
 ```bash
 $ grunt serve
