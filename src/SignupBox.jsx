@@ -22,6 +22,7 @@ module.exports = React.createClass({
             return "There are " + pos + " people ahead of you.";
         }
     },
+    FORM_RESET_TIMEOUT: 10000,
     render: function() {
         var content;
         if (this.state.student === null) {
@@ -35,17 +36,15 @@ module.exports = React.createClass({
         } else {
             // reset the form after delay
             // TODO: make the timeout visible
-            var formResetTimeout = 10000;
-            var timer = setTimeout(this.resetForm, formResetTimeout);
-            var resetForm = this.resetForm;
+            var timer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
 
             // Click handler needs to cancel the resetForm event
             var clickHandler = function(timer) {
                 return function() {
                     clearTimeout(timer);
-                    resetForm();
-                };
-            }(timer);
+                    this.resetForm();
+                }.bind(this);
+            }.bind(this)(timer);
 
             content = (
                 <div>
