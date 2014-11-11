@@ -78,7 +78,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div classname="helper-queue">
+            <div className="helper-queue">
                 <h1>Helper Queue</h1>
                 <QueueStatus enabled={enabled}
                     numRequests={numRequests}
