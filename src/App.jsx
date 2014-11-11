@@ -1,5 +1,7 @@
 // React/routing dependencies
 var React =             require('react');
+require('es6-promise').polyfill();
+
 var Router =            require('react-router');
 var Route =             Router.Route;
 var Routes =            Router.Routes;
