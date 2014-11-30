@@ -1,3 +1,8 @@
+var _ = require("underscore");
+
+var lairState = { enabled: true };
+
+// TODO: actually send AJAX requests
 module.exports = {
     Helpers: {
         find: function(opts) {
@@ -25,10 +30,15 @@ module.exports = {
     LairState: {
         find: function() {
             return new Promise(function(resolve, reject) {
-                var data = {
-                    enabled: true
-                };
-                resolve(data);
+                resolve(lairState);
+            });
+        },
+        update: function(values) {
+            return new Promise(function(resolve, reject) {
+                console.log("hello");
+                lairState = _.extend(lairState, values);
+                console.log("updating lair state to: " + lairState);
+                resolve(lairState);
             });
         }
     },
