@@ -1,31 +1,80 @@
 var _ = require("underscore");
 
 var lairState = { enabled: true };
+var helpers = [
+    { id: 0,
+      first_name: "Elmer",
+      last_name: "Le",
+      sunet_id: "elmerle",
+      active: true
+    },
+    { id: 1,
+      first_name: "Omar",
+      last_name: "Diab",
+      sunet_id: "odiab",
+      active: true
+    },
+    { id: 2,
+      first_name: "Rahul",
+      last_name: "Gupta-Iwasaki",
+      sunet_id: "rahulgi",
+      active: false
+    },
+    { id: 3,
+      first_name: "Maesen",
+      last_name: "Churchill",
+      sunet_id: "maesenc",
+      active: false
+    }
+];
 
 // TODO: actually send AJAX requests
 module.exports = {
     Helpers: {
         find: function(opts) {
             if (typeof opts === "undefined") opts = {};
+            opts.active = opts.active || true;
 
             if (opts.active) {
                 return new Promise(function(resolve, reject) {
-                    var data = [
-                        { id: 0,
-                          first_name: "Elmer",
-                          last_name: "Le",
-                          sunet_id: "elmerle"
-                        }
-                    ];
-
+                    var data = _.filter(helpers, function(h) { return h.active; });
                     resolve(data);
                 });
             }
 
             return new Promise(function(resolve, reject) {
-                resolve([]);
+                var data = _.filter(helpers, function(h) { return !h.active; });
+                resolve(data);
             });
-        }
+        },
+        checkin: function(opts) {
+            return new Promise(function(resolve, reject) {
+                var match = _.find(helpers, function(h) {
+                    return h.id == opts.person_id || h.sunet_id == opts.person_id;
+                });
+
+                if (match) {
+                    match.active = true;
+                    resolve(match);
+                } else {
+                    reject({ message: "Person not found", statusCode: "404" });
+                }
+            });
+        },
+        checkout: function(opts) {
+            return new Promise(function(resolve, reject) {
+                var match = _.find(helpers, function(h) {
+                    return h.id == opts.person_id || h.sunet_id == opts.person_id;
+                });
+
+                if (match) {
+                    match.active = false;
+                    resolve();
+                } else {
+                    reject({ message: "Person not found", statusCode: "404" });
+                }
+            });
+        },
     },
     LairState: {
         find: function() {
@@ -35,7 +84,6 @@ module.exports = {
         },
         update: function(values) {
             return new Promise(function(resolve, reject) {
-                console.log("hello");
                 lairState = _.extend(lairState, values);
                 console.log("updating lair state to: " + lairState);
                 resolve(lairState);
