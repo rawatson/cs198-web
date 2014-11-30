@@ -7,33 +7,43 @@ var HelpRequests = require('./HelpRequests.jsx');
 module.exports = React.createClass({
     REACTIVATE_LEFT_TIMEOUT: 15, // minutes to reactivate reqs from students who left
     refreshState: function() {
+        this.refreshActiveHelpers();
+        this.refreshHelpRequests();
+        this.refreshQueueStatus();
+    },
+    refreshActiveHelpers: function(data) {
+        if (data) return this.setState({ helpers: data });
+
+        Api.Helpers.find({ active: true }).then(function(data) {
+            this.setState({ helpers: data });
+        }.bind(this));
+    },
+    refreshHelpRequests: function(data) {
+        if (data) return this.setState({ requests: data });
+
         Promise.all([
-            Api.LairState.find(),
             Api.HelpRequests.find({ unassigned: true }),
             Api.HelpRequests.find({ left_ago: this.REACTIVATE_LEFT_TIMEOUT }),
-            Api.Helpers.find({ active: true })
-        ]).then(
-            function(values) {
-                var lairState = values[0];
-                var requests = {
-                    unassigned: values[1],
-                    left: values[2]
-                };
-                var helpers = values[3];
+        ]).then(function(values) {
+            var requests = {
+                unassigned: values[0],
+                left: values[1]
+            };
 
-                this.setState({
-                    requests: requests,
-                    queueEnabled: lairState.enabled,
-                    helpers: helpers
-                });
-            }.bind(this), function(error) {
-                // TODO : handle errors
-            }
-        );
+            this.setState({requests: requests});
+        }.bind(this));
+
+    },
+    refreshQueueStatus: function(data) {
+        if (data) return this.setState({ queueStatus: data });
+
+        Api.LairState.find().then(function(data) {
+            this.setState({queueStatus: data});
+        }.bind(this));
     },
     getInitialState: function() {
         return {
-            queueEnabled: null,
+            queueStatus: null,
             requests: null,
             helpers: null
         };
@@ -42,27 +52,27 @@ module.exports = React.createClass({
         setTimeout(this.refreshState, 5000);
         this.refreshState();
     },
-    updateEnabled: function(enabled) {
-        // TODO: AJAX call to affect application state
-        this.setState({queueEnabled: enabled});
-    },
     render: function() {
         var numRequests = null;
         if (this.state.requests !== null) {
             numRequests = this.state.requests.unassigned.length;
         }
+        var enabled = null;
+        if (this.state.queueStatus !== null) {
+            enabled = this.state.queueStatus.enabled;
+        }
 
         return (
             <div classname="helper-queue">
                 <h1>Helper Queue</h1>
-                <QueueStatus enabled={this.state.queueEnabled}
+                <QueueStatus enabled={enabled}
                     numRequests={numRequests}
-                    refresh={this.updateEnabled}
+                    refresh={this.refreshQueueStatus}
                 />
                 <ActiveHelpers helpers={this.state.helpers}
-                    refresh={this.updateActive} />
+                    refresh={this.refreshActiveHelpers} />
                 <HelpRequests requests={this.state.requests}
-                    refresh={this.updateRequests} />
+                    refresh={this.refreshHelpRequests} />
             </div>
         );
     }
