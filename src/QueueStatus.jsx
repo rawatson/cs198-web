@@ -1,4 +1,5 @@
 var React = require('react');
+var Api = require('./Api');
 
 module.exports = React.createClass({
     enabledMessage: function(enabled) {
@@ -16,7 +17,12 @@ module.exports = React.createClass({
     },
     handleToggleEnabled: function() {
         if (this.props.enabled === null) return;
-        this.props.refresh(!this.props.enabled);
+        var enabled = !this.props.enabled;
+        Api.LairState.update({enabled: enabled}).then(function(data) {
+            this.props.refresh(data);
+        }.bind(this), function(err) {
+            //TODO: handle errors
+        });
     },
     render: function() {
         // required variables for render
