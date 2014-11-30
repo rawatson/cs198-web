@@ -42,6 +42,10 @@ module.exports = React.createClass({
         setTimeout(this.refreshState, 5000);
         this.refreshState();
     },
+    updateEnabled: function(enabled) {
+        // TODO: AJAX call to affect application state
+        this.setState({queueEnabled: enabled});
+    },
     render: function() {
         var numRequests = null;
         if (this.state.requests !== null) {
