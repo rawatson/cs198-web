@@ -14,6 +14,10 @@ module.exports = React.createClass({
         }
         return (numRequests === null ? "?" : numRequests) + " unclaimed requests";
     },
+    handleToggleEnabled: function() {
+        if (this.props.enabled === null) return;
+        this.props.refresh(!this.props.enabled);
+    },
     render: function() {
         // required variables for render
         var numRequestsMessage = this.numRequestsMessage(this.props.numRequests);
@@ -23,7 +27,8 @@ module.exports = React.createClass({
         return (
             <div className="queue-status">
                 <span>{openStatusMessage}</span>
-                <button disabled={!toggleEnabled}>Toggle</button>
+                <button onClick={this.handleToggleEnabled}
+                        disabled={!toggleEnabled}>Toggle</button>
             </div>
         );
     }
