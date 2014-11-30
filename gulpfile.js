@@ -40,6 +40,7 @@ gulp.task('watch', ['build'], function() {
   bundler.on('update', rebundle);
 
   function rebundle() {
+    console.log(chalk.yellow('Changes detected!'));
     return browserifyBuild(bundler.bundle()
       .on('error', gutil.log.bind(gutil, 'Browserify Error')));
   }
