@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var connect = require('gulp-connect');
 var browserify = require('browserify');
+var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
@@ -12,25 +13,38 @@ var react = require('gulp-react');
 var chalk = require('chalk');
 var _ = require('underscore');
 
-gulp.task('browserify', function() {
-  var bundler = browserify('./src/App.jsx', {
+function browserifyBundler(args) {
+  args = args || {};
+  args = _.extend(args, {
     basedir: __dirname,
     debug: true
   });
+  return browserify('./src/App.jsx', args);
+}
 
-  return bundler.bundle()
+function browserifyBuild(bundle) {
+  return bundle
     .pipe(source('bundle.js')) // gives streaming vinyl file object
     .pipe(buffer()) // convert from streaming to buffered vinyl file object
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/js/'));
+}
+
+gulp.task('browserify', function() {
+  return browserifyBuild(browserifyBundler().bundle());
 });
 
 gulp.task('watch', ['build'], function() {
-  var watcher = gulp.watch('./src/**/*.{js,jsx}', ['browserify']);
-  watcher.on('change', function(event) {
-    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-  });
+  var bundler = watchify(browserifyBundler(watchify.args));
+  bundler.on('update', rebundle);
+
+  function rebundle() {
+    return browserifyBuild(bundler.bundle()
+      .on('error', gutil.log.bind(gutil, 'Browserify Error')));
+  }
+
+  return rebundle();
 });
 
 gulp.task('connect', ['build'], function() {
