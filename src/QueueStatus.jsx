@@ -26,9 +26,12 @@ module.exports = React.createClass({
 
         return (
             <div className="queue-status">
-                <span>{openStatusMessage}</span>
-                <button onClick={this.handleToggleEnabled}
-                        disabled={!toggleEnabled}>Toggle</button>
+                <ul>
+                    <li><span>{openStatusMessage}</span></li>
+                    <li><span>{numRequestsMessage}</span></li>
+                    <li><button onClick={this.handleToggleEnabled}
+                                disabled={!toggleEnabled}>Toggle</button></li>
+                </ul>
             </div>
         );
     }
