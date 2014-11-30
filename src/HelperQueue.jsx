@@ -39,7 +39,7 @@ module.exports = React.createClass({
         };
     },
     componentDidMount: function() {
-        setTimeout(this.refreshState, 10000);
+        setTimeout(this.refreshState, 5000);
         this.refreshState();
     },
     render: function() {
