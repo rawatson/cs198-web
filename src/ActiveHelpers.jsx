@@ -6,10 +6,8 @@ module.exports = React.createClass({
     handleSignIn: function(e) {
         e.preventDefault();
 
-        data = {
-            person_id: this.refs.sunet_id.getDOMNode().value
-        };
-        Api.Helpers.checkin(data).then(function(helper) {
+        person_id = this.refs.sunet_id.getDOMNode().value;
+        Api.Helpers.checkin(person_id).then(function(helper) {
             var helpers = this.props.helpers;
 
             // Don't add immediately; checkin is idempotent, so it succeeds if the helper is
@@ -29,11 +27,7 @@ module.exports = React.createClass({
         });
     },
     handleSignOut: function(helper_id, e) {
-        data = {
-            person_id: helper_id
-        };
-
-        Api.Helpers.checkout(data).then(function() {
+        Api.Helpers.checkout(helper_id).then(function() {
             this.props.refresh(_.reject(this.props.helpers, function(h) {
                 return h.id == helper_id;
             }));
@@ -47,7 +41,9 @@ module.exports = React.createClass({
             <li>
                 <button className="active-helpers-sign-out"
                         onClick={this.handleSignOut.bind(this, helper.id)}>Sign out</button>
-                <span className="active-helpers-name">{helper.first_name} {helper.last_name}</span>
+                <span className="active-helpers-name">
+                    {helper.person.first_name} {helper.person.last_name}
+                </span>
             </li>
         );
     },
