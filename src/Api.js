@@ -65,7 +65,7 @@ module.exports = {
     },
     People: {
         find: function(id) {
-            return $.get(apiUrl + "/lair/help_requests/" + id + ".json");
+            return $.get(apiUrl + "/people/" + id + ".json");
         }
     }
 };
