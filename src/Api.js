@@ -232,6 +232,57 @@ module.exports = {
 
                 resolve(curr);
             });
+        },
+        assign: function(request_id, helper_id) {
+            return new Promise(function(resolve, reject) {
+                var helper = _.find(helpers, function(h) { return h.id === helper_id; });
+                var request = _.find(helpRequests, function(r) { return r.id === request_id; });
+                if (!helper) {
+                    return reject("Helper not found");
+                }
+                if (!request) {
+                    return reject("Request not found");
+                }
+
+                if (request.helper) {
+                    return reject("Already assigned");
+                }
+
+                request.helper = helper;
+                helper.help_request = request;
+                resolve(request);
+            });
+        },
+        reassign: function(request_id, helper_id) {
+            var helper = _.find(helpers, function(h) { return h.id === helper_id; });
+            var request = _.find(helpRequests, function(r) { return r.id === request_id; });
+            if (!helper || !request) {
+                return reject("Not found");
+            }
+
+            if (!request.helper) {
+                return reject("Not assigned");
+            }
+
+            request.helper.help_request = undefined;
+            request.helper = helper;
+            helper.help_request = request;
+            resolve(request);
+        },
+        resolve: function(request_id, reason) {
+            return new Promise(function(resolve, reject) {
+                var request = _.find(helpRequests, function(r) { return r.id === request_id; });
+                if (!request) {
+                    return reject("Not found");
+                }
+                if (!_.contains(["left", "resolved"], reason)) {
+                    return reject("invalid reason");
+                }
+                request.helper.help_request = undefined;
+                request.helper = undefined;
+                request.close_status = reason;
+                resolve();
+            });
         }
     }
 };
