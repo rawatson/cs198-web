@@ -25,6 +25,7 @@ module.exports = React.createClass({
 
         Promise.all([
             Api.HelpRequests.find({ unassigned: true }),
+            Api.HelpRequests.find({ unassigned: false }),
             Api.HelpRequests.find({
                 closed: true,
                 since: moment().subtract(this.REACTIVATE_LEFT_TIMEOUT, "minutes")
@@ -32,7 +33,8 @@ module.exports = React.createClass({
         ]).then(function(values) {
             var requests = {
                 unassigned: values[0],
-                closed_recently: values[1]
+                assigned: values[1],
+                closed_recently: values[2]
             };
 
             this.setState({requests: requests});
