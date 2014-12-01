@@ -79,7 +79,10 @@ module.exports = React.createClass({
                 <ActiveHelpers helpers={this.state.helpers}
                     refresh={this.refreshActiveHelpers} />
                 <HelpRequests helpers={this.state.helpers} requests={this.state.requests}
-                    refresh={this.refreshHelpRequests} />
+                    refresh={function() {
+                        this.refreshHelpRequests();
+                        this.refreshActiveHelpers();
+                    }.bind(this)} />
             </div>
         );
     }
