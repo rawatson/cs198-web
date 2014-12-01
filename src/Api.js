@@ -42,6 +42,9 @@ module.exports = {
         index: function(opts) {
             return $.get(apiUrl + "/lair/help_requests.json", opts);
         },
+        create: function(data) {
+            return $.post(apiUrl + "/lair/help_requests.json", data);
+        },
         assign: function(request_id, helper_id) {
             return $.post(apiUrl + "/lair/help_requests/" + request_id + "/assignments.json", {
                 helper_id: helper_id
