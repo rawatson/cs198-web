@@ -27,9 +27,7 @@ module.exports = {
         update: function(values) {
             return $.ajax({
                 url: apiUrl + "/lair/status.json",
-                data: {
-                    signup_enabled: values.signup_enabled
-                },
+                data: values,
                 type: "PUT"
             });
         }
