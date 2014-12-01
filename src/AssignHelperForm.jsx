@@ -7,7 +7,12 @@ module.exports = React.createClass({
         this.props.callback(this.refs.helper.getDOMNode().value);
     },
     renderHelperOption: function(h) {
-        return <option value={h.id}>{h.person.first_name} {h.person.last_name}</option>;
+        // NOTE: gotcha! the below can't be
+        //      {h.person.first_name} {h.person.last_name}
+        // since that would produce two spans in an option tag, and option tags can't contain
+        // anything but text. So do string interpolation instead, so that React just inserts
+        // plain text. *FACEPALM*
+        return <option value={h.id}>{h.person.first_name + " " + h.person.last_name}</option>;
     },
     render: function() {
         var formContents;
