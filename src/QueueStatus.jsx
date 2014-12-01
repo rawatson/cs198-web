@@ -18,7 +18,7 @@ module.exports = React.createClass({
     handleToggleEnabled: function() {
         if (this.props.enabled === null) return;
         var enabled = !this.props.enabled;
-        Api.LairState.update({enabled: enabled}).then(function(data) {
+        Api.LairState.update({signups_enabled: enabled}).then(function(data) {
             this.props.refresh(data);
         }.bind(this), function(err) {
             //TODO: handle errors
