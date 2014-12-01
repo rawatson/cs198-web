@@ -26,8 +26,11 @@ module.exports = React.createClass({
         return (
             <ul>
                 {_.map(requests, function(req) {
-                    return (<HelpRequest helpers={this.props.helpers} request={req}
-                                         refresh={this.props.refresh} />);
+                    return (
+                        <li>
+                            <HelpRequest helpers={this.props.helpers} request={req}
+                                refresh={this.props.refresh} />
+                        </li>);
                  }.bind(this))}
             </ul>
         );
@@ -42,6 +45,7 @@ module.exports = React.createClass({
 
         return (
             <div className="requests-assigned">
+                <h4>In progress</h4>
                 {elem}
             </div>
         );
@@ -52,16 +56,21 @@ module.exports = React.createClass({
             elems = [<p>No unassigned requests!</p>];
         } else {
             var moreClass = "requests-more";
+            var toggleText;
             if (!this.state.unassignedExpanded) {
                 moreClass += " hidden";
+                toggleText = "More requests...";
+            } else {
+                toggleText = "Fewer requests";
             }
+
             elems = [
                 (<HelpRequest helpers={this.props.helpers}
                               request={_.first(this.props.requests.unassigned)}
                               refresh={this.props.refresh}
                     />),
                 (<a href=""
-                    onClick={this.toggleExpandMore("unassigned").bind(this)}>More requests...</a>),
+                    onClick={this.toggleExpandMore("unassigned").bind(this)}>{toggleText}</a>),
                 (
                     <div className={moreClass}>
                         {this.renderRequestList(_.tail(this.props.requests.unassigned))}
@@ -72,6 +81,7 @@ module.exports = React.createClass({
 
         return (
             <div className="requests-unassigned">
+                <h4>Up next:</h4>
                 {elems}
             </div>
         );
@@ -85,13 +95,18 @@ module.exports = React.createClass({
         }
 
         var moreClass = "requests-more";
+        var toggleText;
         if (!this.state.closedExpanded) {
             moreClass += " hidden";
+            toggleText = "Expand...";
+        } else {
+            toggleText = "Collapse";
         }
 
         return (
             <div className="requests-closed">
-                <a href="" onClick={this.toggleExpandMore("closed").bind(this)}>Recently closed</a>
+                <h4>Recently closed</h4>
+                <a href="" onClick={this.toggleExpandMore("closed").bind(this)}>{toggleText}</a>
                 <div className={moreClass}>
                     {elem}
                 </div>
