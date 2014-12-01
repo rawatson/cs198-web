@@ -40,7 +40,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="requests-unassigned">
+            <div className="requests-assigned">
                 {elem}
             </div>
         );
