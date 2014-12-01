@@ -16,7 +16,7 @@ module.exports = React.createClass({
     refreshActiveHelpers: function(data) {
         if (data) return this.setState({ helpers: data });
 
-        Api.Helpers.find({ active: true }).then(function(data) {
+        Api.Helpers.find().then(function(data) {
             this.setState({ helpers: data });
         }.bind(this));
     },
@@ -78,7 +78,7 @@ module.exports = React.createClass({
                 />
                 <ActiveHelpers helpers={this.state.helpers}
                     refresh={this.refreshActiveHelpers} />
-                <HelpRequests requests={this.state.requests}
+                <HelpRequests helpers={this.state.helpers} requests={this.state.requests}
                     refresh={this.refreshHelpRequests} />
             </div>
         );
