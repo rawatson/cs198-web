@@ -2,31 +2,94 @@ var _       = require("underscore");
 var moment  = require("moment");
 
 var lairState = { enabled: true };
+var people = [
+    {
+        id: 1,
+        first_name: "Rahul",
+        last_name: "Gupta-Iwasaki",
+        sunet_id: "rahulgi",
+        staff: true
+    },
+    {
+        id: 2,
+        first_name: "Elmer",
+        last_name: "Le",
+        sunet_id: "elmerle",
+        staff: true
+    },
+    {
+        id: 3,
+        first_name: "Maesen",
+        last_name: "Churchill",
+        sunet_id: "maesenc",
+        staff: true
+    },
+    {
+        id: 4,
+        first_name: "Omar",
+        last_name: "Diab",
+        sunet_id: "odiab",
+        staff: true
+    },
+    {
+        id: 5,
+        first_name: "Daniel",
+        last_name: "Steffee",
+        sunet_id: "dsteffee",
+        staff: false
+    },
+    {
+        id: 6,
+        first_name: "Robert",
+        last_name: "Harlow",
+        sunet_id: "rharlow",
+        staff: false
+    },
+    {
+        id: 7,
+        first_name: "Amy",
+        last_name: "Nguyen",
+        sunet_id: "amyng",
+        staff: false
+    },
+    {
+        id: 8,
+        first_name: "Mehran",
+        last_name: "Sahami",
+        sunet_id: "msahami",
+        staff: false
+    },
+];
+
+var curHelperId = 3;
 var helpers = [
     { id: 0,
-      first_name: "Elmer",
-      last_name: "Le",
-      sunet_id: "elmerle",
-      active: true
+      person: {
+        id: 2,
+        first_name: "Elmer",
+        last_name: "Le",
+        sunet_id: "elmerle",
+      },
+      help_request: {
+        id: 1,
+        person: {
+            first_name: "Daniel",
+            last_name: "Steffee"
+        },
+        position: 0,
+        created_at: "May 2 2014",
+        course: {
+            code: "CS106A",
+        }, description: "It broked", location: "19"
+      }
     },
     { id: 1,
-      first_name: "Omar",
-      last_name: "Diab",
-      sunet_id: "odiab",
-      active: true
+      person: {
+        first_name: "Omar",
+        last_name: "Diab",
+        sunet_id: "odiab",
+      }
     },
-    { id: 2,
-      first_name: "Rahul",
-      last_name: "Gupta-Iwasaki",
-      sunet_id: "rahulgi",
-      active: false
-    },
-    { id: 3,
-      first_name: "Maesen",
-      last_name: "Churchill",
-      sunet_id: "maesenc",
-      active: false
-    }
 ];
 var helpRequests = [
     { id: 1,
@@ -82,46 +145,48 @@ module.exports = {
     Helpers: {
         find: function(opts) {
             if (typeof opts === "undefined") opts = {};
-            opts.active = opts.active || true;
-
-            if (opts.active) {
-                return new Promise(function(resolve, reject) {
-                    var data = _.filter(helpers, function(h) { return h.active; });
-                    resolve(data);
-                });
-            }
 
             return new Promise(function(resolve, reject) {
-                var data = _.filter(helpers, function(h) { return !h.active; });
-                resolve(data);
+                resolve(helpers);
             });
         },
-        checkin: function(opts) {
+        checkin: function(person_id) {
             return new Promise(function(resolve, reject) {
-                var match = _.find(helpers, function(h) {
-                    return h.id == opts.person_id || h.sunet_id == opts.person_id;
+                var matchPerson = _.find(people, function(p) {
+                    return p.id == person_id || p.sunet_id == person_id;
                 });
 
-                if (match) {
-                    match.active = true;
-                    resolve(match);
-                } else {
-                    reject({ message: "Person not found", statusCode: "404" });
+                if (!matchPerson) {
+                    return reject({ message: "Person not found", statusCode: "404" });
                 }
+
+                if (!matchPerson.staff) {
+                    return reject({ message: "Person not staff", statusCode: "403" });
+                }
+
+                var matchHelper = _.find(helpers, function(h) {
+                    return h.person.id === person_id || h.person.sunet_id === person_id;
+                });
+
+                if (matchHelper) {
+                    return resolve(matchHelper);
+                }
+
+                var newHelper = {id: curHelperId++, person: matchPerson};
+                helpers.push(newHelper);
+                resolve(newHelper);
             });
         },
-        checkout: function(opts) {
+        checkout: function(helper_id) {
             return new Promise(function(resolve, reject) {
-                var match = _.find(helpers, function(h) {
-                    return h.id == opts.person_id || h.sunet_id == opts.person_id;
-                });
+                var match = _.find(helpers, function(h) { return h.id == helper_id; });
 
-                if (match) {
-                    match.active = false;
-                    resolve();
-                } else {
-                    reject({ message: "Person not found", statusCode: "404" });
+                if (!match) {
+                    return reject({ message: "Helper checkin not found", statusCode: "404" });
                 }
+
+                helpers = _.reject(helpers, function(h) { return h.id == helper_id; });
+                resolve();
             });
         },
     },
@@ -134,7 +199,6 @@ module.exports = {
         update: function(values) {
             return new Promise(function(resolve, reject) {
                 lairState = _.extend(lairState, values);
-                console.log("updating lair state to: " + lairState);
                 resolve(lairState);
             });
         }
@@ -142,7 +206,6 @@ module.exports = {
     HelpRequests: {
         find: function(opts) {
             if (typeof opts === "undefined") opts = {unassigned: true};
-            console.log(JSON.stringify(opts));
 
             var filters = [];
             if (opts.unassigned) {
