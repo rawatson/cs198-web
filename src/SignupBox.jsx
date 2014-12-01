@@ -1,10 +1,30 @@
-var React = require('react');
-var SignupForm = require('./SignupForm.jsx');
-var ActiveHelpers = require('./ActiveHelpers.jsx');
+var React           = require('react');
+
+var SignupForm      = require('./SignupForm.jsx');
+var ActiveHelpers   = require('./ActiveHelpers.jsx');
+var Api             = require('./Api');
 
 module.exports = React.createClass({
     getInitialState: function() {
         return {student: null};
+    },
+    refreshState: function() {
+        this.refreshActiveHelpers();
+        this.refreshQueueStatus();
+    },
+    refreshActiveHelpers: function(data) {
+        if (data) return this.setState({ helpers: data });
+
+        Api.Helpers.index().then(function(data) {
+            this.setState({ helpers: data.data });
+        }.bind(this));
+    },
+    refreshQueueStatus: function(data) {
+        if (data) return this.setState({ queueStatus: data });
+
+        Api.LairState.find().then(function(data) {
+            this.setState({queueStatus: data.data});
+        }.bind(this));
     },
     resetForm: function() {
         this.setState({student: null});
