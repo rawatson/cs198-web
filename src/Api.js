@@ -93,12 +93,10 @@ var helpers = [
 ];
 var helpRequests = [
     { id: 1,
-      helper_assignment: {
-        helper: { person: {
-            first_name: "Elmer",
-            last_name: "Le",
-            sunet_id: "elmerle" } }
-      },
+      helper: { person: {
+        first_name: "Elmer",
+        last_name: "Le",
+        sunet_id: "elmerle" } },
       person: {
           first_name: "Daniel",
           last_name: "Steffee"
@@ -209,9 +207,9 @@ module.exports = {
 
             var filters = [];
             if (opts.unassigned) {
-                filters.push(function(r) { return !r.helper_assignment; });
+                filters.push(function(r) { return !r.helper; });
             } else if (opts.unassigned === false) {
-                filters.push(function(r) { return !!r.helper_assignment; });
+                filters.push(function(r) { return !!r.helper; });
             }
 
             if (opts.closed) {
