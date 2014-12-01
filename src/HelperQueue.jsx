@@ -10,6 +10,7 @@ var HelpRequests = require('./HelpRequests.jsx');
 
 module.exports = React.createClass({
     REACTIVATE_LEFT_TIMEOUT: 15, // minutes to reactivate reqs from students who left
+    REFRESH_RATE: 5000, // milliseconds to refresh
     refreshState: function() {
         this.refreshActiveHelpers();
         this.refreshHelpRequests();
@@ -64,8 +65,11 @@ module.exports = React.createClass({
         };
     },
     componentDidMount: function() {
-        setInterval(this.refreshState, 5000);
+        this.refreshInterval = setInterval(this.refreshState, this.REFRESH_RATE);
         this.refreshState();
+    },
+    componentWillUnmount: function() {
+        clearInterval(this.refreshInterval);
     },
     render: function() {
         var numRequests = null;
