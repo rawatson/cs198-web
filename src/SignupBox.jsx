@@ -5,8 +5,9 @@ var ActiveHelpers   = require('./ActiveHelpers.jsx');
 var Api             = require('./Api');
 
 module.exports = React.createClass({
+    REFRESH_RATE: 5000, // milliseconds to refresh
     getInitialState: function() {
-        return {student: null};
+        return {student: null, queueStatus: {signups_enabled: null}};
     },
     refreshState: function() {
         this.refreshActiveHelpers();
@@ -29,8 +30,8 @@ module.exports = React.createClass({
     resetForm: function() {
         this.setState({student: null});
     },
-    onHelpRequest: function(student, queueStats) {
-        this.setState({student: student, queueStats: queueStats});
+    onHelpRequest: function(student, helpRequest) {
+        this.setState({student: student, helpRequest: helpRequest});
     },
     positionMessage: function(pos) {
         switch (pos) {
@@ -43,43 +44,80 @@ module.exports = React.createClass({
         }
     },
     FORM_RESET_TIMEOUT: 10000,
-    render: function() {
-        var content;
-        if (this.state.student === null) {
-            content = (
-                <div>
-                    <h1>Welcome to the LaIR</h1>
-                    <p>Enter your SUnetID to request or view the status of your request.</p>
-                    <SignupForm submitCallback={this.onHelpRequest} />
-                </div>
-            );
+    renderWelcomeState: function() {
+        var elems;
+        if (this.state.queueStatus.signups_enabled === true) {
+            elems = [
+                <p>Enter your SUnetID to request or view the status of your request.</p>,
+                <SignupForm submitCallback={this.onHelpRequest} />
+            ];
+        } else if (this.state.queueStatus.signups_enabled === null) {
+            elems = [
+                <p>Loading...</p>
+            ];
         } else {
-            // reset the form after delay
-            // TODO: make the timeout visible
-            var timer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
+            elems = [
+                <p>Sorry, signups have been disabled now. Have a good day!</p>
+            ];
+        }
+        return (
+            <div>
+                <h1>Welcome to the LaIR</h1>
+                {elems}
+            </div>
+        );
+    },
+    renderResetHandler: function(timer) {
+        // Click handler needs to cancel the resetForm event
+        return function(timer) {
+            return function() {
+                clearTimeout(timer);
+                this.resetForm();
+            }.bind(this);
+        }.bind(this)(timer);
+    },
+    renderSubmittedState: function() {
+        // reset the form after delay
+        // TODO: make the timeout visible
+        var timer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
+        var resetHandler = this.renderResetHandler(timer);
 
-            // Click handler needs to cancel the resetForm event
-            var clickHandler = function(timer) {
-                return function() {
-                    clearTimeout(timer);
-                    this.resetForm();
-                }.bind(this);
-            }.bind(this)(timer);
+        var message = false;
+        if (this.state.helpRequest) {
+            message = (<p>{this.positionMessage(this.state.helpRequest.position)}</p>);
+        }
 
-            content = (
-                <div>
-                    <h1>{this.state.student.first_name}, we have your help request!</h1>
-                    <p>{this.positionMessage(this.state.queueStats.position)}</p>
-                    <p>We will do our best to get to you as quickly as possible.</p>
-                    <button onClick={clickHandler}>Return to request help</button>
-                </div>
-            );
+        return (
+            <div>
+                <h1>{this.state.student.first_name}, we have your help request!</h1>
+                <p>{message}</p>
+                <p>We will do our best to get to you as quickly as possible.</p>
+                <button onClick={resetHandler}>Return to request help</button>
+            </div>
+        );
+    },
+    componentDidMount: function() {
+        this.refreshInterval = setInterval(this.refreshState, this.REFRESH_RATE);
+        this.refreshState();
+    },
+    componentWillUnmount: function() {
+        clearInterval(this.refreshInterval);
+    },
+    render: function() {
+        var content = [];
+        if (this.state.student === null) {
+            content.push(this.renderWelcomeState());
+        } else {
+            content.push(this.renderSubmittedState());
+        }
+
+        if (this.state.queueStatus.signups_enabled) {
+            content.push(<h2>Current LaIR helpers</h2>);
+            content.push(<ActiveHelpers helpers={this.state.helpers} staff={false} />);
         }
         return (
             <div className="signup-box">
                 {content}
-                <h2>Current LaIR helpers</h2>
-                <ActiveHelpers helpers={this.state.helpers} staff={false} />
             </div>
         );
     }
