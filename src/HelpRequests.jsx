@@ -26,8 +26,8 @@ module.exports = React.createClass({
         return (
             <ul>
                 {_.map(requests, function(req) {
-                    return (<HelpRequest request={req} />);
-                })}
+                    return (<HelpRequest helpers={this.props.helpers} request={req} />);
+                }.bind(this))}
             </ul>
         );
     },
@@ -55,7 +55,8 @@ module.exports = React.createClass({
                 moreClass += " hidden";
             }
             elems = [
-                (<HelpRequest request={_.first(this.props.requests.unassigned)} />),
+                (<HelpRequest helpers={this.props.helpers}
+                              request={_.first(this.props.requests.unassigned)} />),
                 (<a href=""
                     onClick={this.toggleExpandMore("unassigned").bind(this)}>More requests...</a>),
                 (
