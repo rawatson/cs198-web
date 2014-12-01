@@ -1,5 +1,7 @@
-var React = require('react');
+var React   = require('react');
 var moment  = require("moment");
+var _       = require("underscore");
+var $       = require("jquery");
 
 var Api = require('./Api.js');
 var QueueStatus = require('./QueueStatus.jsx');
@@ -17,24 +19,30 @@ module.exports = React.createClass({
         if (data) return this.setState({ helpers: data });
 
         Api.Helpers.find().then(function(data) {
-            this.setState({ helpers: data });
+            this.setState({ helpers: data.data });
         }.bind(this));
     },
     refreshHelpRequests: function(data) {
         if (data) return this.setState({ requests: data });
 
-        Promise.all([
-            Api.HelpRequests.find({ unassigned: true }),
-            Api.HelpRequests.find({ unassigned: false }),
+        $.when(
+            Api.HelpRequests.find(),
             Api.HelpRequests.find({
-                closed: true,
-                since: moment().subtract(this.REACTIVATE_LEFT_TIMEOUT, "minutes")
-            }),
-        ]).then(function(values) {
+                open: false,
+                since: moment().subtract(this.REACTIVATE_LEFT_TIMEOUT, "minutes").utc().format()
+            })
+        ).then(function(open, closed_recently) {
+            open = open[0].data;
+            closed_recently = closed_recently[0].data;
+
+            var isUnassigned = function(r) {
+                return !("helper" in r);
+            };
+
             var requests = {
-                unassigned: values[0],
-                assigned: values[1],
-                closed_recently: values[2]
+                unassigned: _.filter(open, isUnassigned),
+                assigned: _.reject(open, isUnassigned),
+                closed_recently: closed_recently
             };
 
             this.setState({requests: requests});
@@ -45,7 +53,7 @@ module.exports = React.createClass({
         if (data) return this.setState({ queueStatus: data });
 
         Api.LairState.find().then(function(data) {
-            this.setState({queueStatus: data});
+            this.setState({queueStatus: data.data});
         }.bind(this));
     },
     getInitialState: function() {
@@ -66,7 +74,7 @@ module.exports = React.createClass({
         }
         var enabled = null;
         if (this.state.queueStatus !== null) {
-            enabled = this.state.queueStatus.enabled;
+            enabled = this.state.queueStatus.signups_enabled;
         }
 
         return (
