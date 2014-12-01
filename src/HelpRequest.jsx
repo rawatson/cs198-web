@@ -86,12 +86,12 @@ module.exports = React.createClass({
         } else {
             var prompt;
             var verb;
-            if (this.props.request.close_status) {
-                prompt = "Reopen and assign to...";
-                verb = "reopen";
-            } else {
+            if (this.props.request.open) {
                 prompt = "Assign to...";
                 verb = "assign";
+            } else {
+                prompt = "Reopen and assign to...";
+                verb = "reopen";
             }
             elems.push(<AssignHelperForm
                 availableHelpers={this.availableHelpers()}
