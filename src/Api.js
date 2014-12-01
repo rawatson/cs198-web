@@ -5,8 +5,11 @@ var $       = require("jquery");
 var apiUrl = "http://localhost:3000";
 module.exports = {
     Helpers: {
-        find: function(opts) {
-            return $.get(apiUrl + "/lair/helpers.json");
+        find: function(id) {
+            return $.get(apiUrl + "/lair/helpers/" + id + ".json");
+        },
+        index: function(opts) {
+            return $.get(apiUrl + "/lair/helpers.json", opts);
         },
         checkin: function(person_id) {
             return $.post(apiUrl + "/lair/helpers.json", {
@@ -33,7 +36,10 @@ module.exports = {
         }
     },
     HelpRequests: {
-        find: function(opts) {
+        find: function(id) {
+            return $.get(apiUrl + "/lair/help_requests" + id + ".json");
+        },
+        index: function(opts) {
             return $.get(apiUrl + "/lair/help_requests.json", opts);
         },
         assign: function(request_id, helper_id) {
