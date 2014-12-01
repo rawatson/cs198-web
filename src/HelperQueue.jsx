@@ -85,7 +85,8 @@ module.exports = React.createClass({
                     refresh={this.refreshQueueStatus}
                 />
                 <ActiveHelpers helpers={this.state.helpers}
-                    refresh={this.refreshActiveHelpers} />
+                    refresh={this.refreshActiveHelpers}
+                    staff={true} />
                 <HelpRequests helpers={this.state.helpers} requests={this.state.requests}
                     refresh={function() {
                         this.refreshHelpRequests();

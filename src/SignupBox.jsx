@@ -59,7 +59,7 @@ module.exports = React.createClass({
             <div className="signup-box">
                 {content}
                 <h2>Current LaIR helpers</h2>
-                <ActiveHelpers />
+                <ActiveHelpers helpers={this.state.helpers} staff={false} />
             </div>
         );
     }
