@@ -8,6 +8,7 @@ module.exports = React.createClass({
 
         person_id = this.refs.sunet_id.getDOMNode().value;
         Api.Helpers.checkin(person_id).then(function(helper) {
+            helper = helper.data;
             var helpers = this.props.helpers;
 
             // Don't add immediately; checkin is idempotent, so it succeeds if the helper is
