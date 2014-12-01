@@ -48,7 +48,6 @@ module.exports = React.createClass({
         var elems;
         if (this.state.queueStatus.signups_enabled === true) {
             elems = [
-                <p>Enter your SUnetID to request or view the status of your request.</p>,
                 <SignupForm submitCallback={this.onHelpRequest} />
             ];
         } else if (this.state.queueStatus.signups_enabled === null) {
@@ -82,15 +81,15 @@ module.exports = React.createClass({
         var timer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
         var resetHandler = this.renderResetHandler(timer);
 
-        var message = false;
+        var message;
         if (this.state.helpRequest) {
-            message = (<p>{this.positionMessage(this.state.helpRequest.position)}</p>);
+            message = <p>{this.positionMessage(this.state.helpRequest.position)}</p>;
         }
 
         return (
             <div>
                 <h1>{this.state.student.first_name}, we have your help request!</h1>
-                <p>{message}</p>
+                {message}
                 <p>We will do our best to get to you as quickly as possible.</p>
                 <button onClick={resetHandler}>Return to request help</button>
             </div>
