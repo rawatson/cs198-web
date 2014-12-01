@@ -1,40 +1,118 @@
 var React   = require('react');
 var _       = require('underscore');
 
+var HelpRequest = require('./HelpRequest.jsx');
+
 module.exports = React.createClass({
-    renderRequest: function(request) {
+    getInitialState: function() {
+        return {
+            unassignedExpanded: false,
+            closedExpanded: false
+        };
+    },
+    toggleExpandMore: function(type) {
+        return function(e) {
+            e.preventDefault();
+
+            switch(type) {
+            case "unassigned":
+                return this.setState({unassignedExpanded: !this.state.unassignedExpanded});
+            case "closed":
+                return this.setState({closedExpanded: !this.state.closedExpanded});
+            }
+        };
+    },
+    renderRequestList: function(requests) {
         return (
-            <li>
-                <span className="request-student">
-                    {request.person.first_name} {request.person.last_name}
-                </span>
-                <span className="request-description">
-                    {request.description}
-                </span>
-                <span className="request-course">
-                    {request.course.code}
-                </span>
-                <span className="location">
-                    {request.location}
-                </span>
-            </li>
+            <ul>
+                {_.map(requests, function(req) {
+                    return (<HelpRequest request={req} />);
+                })}
+            </ul>
+        );
+    },
+    renderAssigned: function() {
+        var elem;
+        if (_.isEmpty(this.props.requests.assigned)) {
+            elem = <p>No assigned requests.</p>;
+        } else {
+            elem = this.renderRequestList(this.props.requests.assigned);
+        }
+
+        return (
+            <div className="requests-unassigned">
+                {elem}
+            </div>
+        );
+    },
+    renderUnassigned: function() {
+        var elems;
+        if (_.isEmpty(this.props.requests.unassigned)) {
+            elems = [<p>No unassigned requests!</p>];
+        } else {
+            var moreClass = "requests-more";
+            if (!this.state.unassignedExpanded) {
+                moreClass += " hidden";
+            }
+            elems = [
+                (<HelpRequest request={_.first(this.props.requests.unassigned)} />),
+                (<a href=""
+                    onClick={this.toggleExpandMore("unassigned").bind(this)}>More requests...</a>),
+                (
+                    <div className={moreClass}>
+                        {this.renderRequestList(_.tail(this.props.requests.unassigned))}
+                    </div>
+                )
+            ];
+        }
+
+        return (
+            <div className="requests-unassigned">
+                {elems}
+            </div>
+        );
+    },
+    renderClosed: function() {
+        var elem;
+        if (_.isEmpty(this.props.requests.closed_recently)) {
+            elem = <p>No recently closed requests.</p>;
+        } else {
+            elem = this.renderRequestList(this.props.requests.closed_recently);
+        }
+
+        var moreClass = "requests-more";
+        if (!this.state.closedExpanded) {
+            moreClass += " hidden";
+        }
+
+        return (
+            <div className="requests-closed">
+                <a href="" onClick={this.toggleExpandMore("closed").bind(this)}>Recently closed</a>
+                <div className={moreClass}>
+                    {elem}
+                </div>
+            </div>
         );
     },
     render: function() {
-        var helpRequestsElem;
+        var requestsElem;
+
         if (this.props.requests === null) {
-            helpRequestsElem = (<span>Loading...</span>);
+            requestsElem = (<span>Loading...</span>);
         } else {
-            helpRequestsElem = (
-               <ul>{_.map(this.props.requests.unassigned,
-                          this.renderRequest)}</ul>
+            requestsElem = (
+                <div className="help-requests-container">
+                    {this.renderUnassigned()}
+                    {this.renderAssigned()}
+                    {this.renderClosed()}
+                </div>
             );
         }
 
         return (
             <div className="help-requests">
                 <h3>Help Requests</h3>
-                {helpRequestsElem}
+                {requestsElem}
             </div>
         );
     }
