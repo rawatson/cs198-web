@@ -1,4 +1,6 @@
 var React = require('react');
+var moment  = require("moment");
+
 var Api = require('./Api.js');
 var QueueStatus = require('./QueueStatus.jsx');
 var ActiveHelpers = require('./ActiveHelpers.jsx');
@@ -23,11 +25,14 @@ module.exports = React.createClass({
 
         Promise.all([
             Api.HelpRequests.find({ unassigned: true }),
-            Api.HelpRequests.find({ left_ago: this.REACTIVATE_LEFT_TIMEOUT }),
+            Api.HelpRequests.find({
+                closed: true,
+                since: moment().subtract(this.REACTIVATE_LEFT_TIMEOUT, "minutes")
+            }),
         ]).then(function(values) {
             var requests = {
                 unassigned: values[0],
-                left: values[1]
+                closed_recently: values[1]
             };
 
             this.setState({requests: requests});
