@@ -38,32 +38,35 @@ module.exports = React.createClass({
         });
     },
     renderHelper: function(helper) {
-        return (
-            <li>
+        var elems = [];
+        if (this.props.staff) {
+            elems.push(
                 <button className="active-helpers-sign-out"
-                        onClick={this.handleSignOut.bind(this, helper.id)}>Sign out</button>
-                <span className="active-helpers-name">
-                    {helper.person.first_name} {helper.person.last_name}
-                </span>
-            </li>
+                        onClick={this.handleSignOut.bind(this, helper.id)}>Sign out</button>);
+        }
+        elems.push(
+            <span className="active-helpers-name">
+                {helper.person.first_name} {helper.person.last_name}
+            </span>
         );
+        return elems;
     },
     render: function() {
         var helpersElem;
-
         if (this.props.helpers === null) {
             helpersElem = (<span>Loading...</span>);
         } else {
+            var elems = _.map(this.props.helpers, this.renderHelper);
+            if (this.props.staff) {
+                elems.push(
+                    <form onSubmit={this.handleSignIn}>
+                        <input type="text" ref="sunet_id" placeholder="SUNet ID" />
+                        <input type="submit" value="Sign in" />
+                    </form>
+                );
+            }
             helpersElem = (
-                <ul>
-                    {_.map(this.props.helpers, this.renderHelper)}
-                    <li>
-                        <form onSubmit={this.handleSignIn}>
-                            <input type="text" ref="sunet_id" placeholder="SUNet ID" />
-                            <input type="submit" value="Sign in" />
-                        </form>
-                    </li>
-                </ul>
+                <ul>{_.map(elems, function(e) { return <li>{e}</li>; })}</ul>
             );
         }
 
