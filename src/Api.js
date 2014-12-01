@@ -64,61 +64,8 @@ module.exports = {
         }
     },
     People: {
-        find: function(opts) {
-            if (typeof opts === "undefined") opts = {};
-
-            if (opts.sunet_id) {
-                // TODO: actually run AJAX query for person
-                return new Promise(function(resolve, reject) {
-                    switch (opts.sunet_id) {
-                    case "odiab":
-                        return resolve({
-                            id: 0,
-                            sunet_id: "odiab",
-                            first_name: "Omar",
-                            courses: [{id: 0, code: "CS106A"}],
-                            requests: Promise.resolve([])
-                        });
-                    case "rawatson":
-                        return resolve({
-                            id: 1,
-                            sunet_id: "rawatson",
-                            first_name: "Reid",
-                            courses: [{id: 0, code: "CS106A"}, {id: 1, code: "CS106B"}],
-                            requests: Promise.resolve([])
-                        });
-                    case "kmiller4":
-                        return resolve({
-                            id: 2,
-                            sunet_id: "kmiller4",
-                            first_name: "Kevin",
-                            courses: [{id: 0, code: "CS106A"}],
-                            requests: Promise.resolve([{
-                                id: 5,
-                                course_id: 0,
-                                description: "I don't know thing",
-                                location: "bathroom",
-                                position: 0
-                            }])
-                        });
-                    case "amainero":
-                        return resolve({
-                            id: 3,
-                            sunet_id: "amainero",
-                            first_name: "Anthony",
-                            courses: [],
-                            requests: Promise.resolve([])
-                        });
-                    default:
-                        return reject({
-                            status: 404,
-                            message: "Person not found"
-                        });
-                    }
-                });
-            }
-
-            throw new Error("Not implemented");
+        find: function(id) {
+            return $.get(apiUrl + "/lair/help_requests/" + id + ".json");
         }
     }
 };
