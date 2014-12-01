@@ -18,7 +18,7 @@ module.exports = React.createClass({
     refreshActiveHelpers: function(data) {
         if (data) return this.setState({ helpers: data });
 
-        Api.Helpers.find().then(function(data) {
+        Api.Helpers.index().then(function(data) {
             this.setState({ helpers: data.data });
         }.bind(this));
     },
@@ -26,8 +26,8 @@ module.exports = React.createClass({
         if (data) return this.setState({ requests: data });
 
         $.when(
-            Api.HelpRequests.find(),
-            Api.HelpRequests.find({
+            Api.HelpRequests.index(),
+            Api.HelpRequests.index({
                 open: false,
                 since: moment().subtract(this.REACTIVATE_LEFT_TIMEOUT, "minutes").utc().format()
             })
