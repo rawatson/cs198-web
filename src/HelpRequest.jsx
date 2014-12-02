@@ -95,11 +95,6 @@ module.exports = React.createClass({
             </div>
         ];
 
-        if (helper) {
-            elems.push(<div><span className="request-assignment">
-                {"Assigned to " + helper.first_name + " " + helper.last_name}
-            </span></div>);
-        }
         elems = elems.concat([
             <div className="request-description">
                 {request.description}
@@ -109,10 +104,16 @@ module.exports = React.createClass({
                     {"Location: " + request.location}
                 </span>
                 <span className="request-timestamp">
-                    {moment(request.created_at).format("h:mm A MMM D, YYYY")}
+                    {moment(request.created_at).format("h:mm A")}
                 </span>
             </div>
         ]);
+
+        if (helper) {
+            elems.push(<div><span className="request-assignment">
+                {helper.first_name + " " + helper.last_name + " is helping"}
+            </span></div>);
+        }
 
         var className = "clearfix help-request";
         if (this.props.highlight) {
