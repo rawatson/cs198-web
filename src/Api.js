@@ -1,6 +1,5 @@
 var _       = require("underscore");
 var moment  = require("moment");
-var $       = require("jquery");
 
 var apiUrl = "http://localhost:3000";
 module.exports = {
