@@ -41,39 +41,43 @@ module.exports = React.createClass({
         var elems = [];
         if (this.props.staff) {
             elems.push(
-                <button className="active-helpers-sign-out"
-                        onClick={this.handleSignOut.bind(this, helper.id)}>Sign out</button>);
+                <a href="#" className="helper-sign-out list-btn"
+                    onClick={this.handleSignOut.bind(this, helper.id)}>
+                    <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>);
         }
         elems.push(
             <span className="active-helpers-name">
-                {helper.person.first_name} {helper.person.last_name}
+                {helper.person.first_name + " " + helper.person.last_name}
             </span>
         );
-        return elems;
+        return <li>{elems}</li>;
     },
     render: function() {
-        var helpersElem;
+        var elems = [];
+
         if (this.props.helpers === null) {
-            helpersElem = (<span>Loading...</span>);
+            elems.push(<span>Loading...</span>);
         } else {
-            var elems = _.map(this.props.helpers, this.renderHelper);
-            if (this.props.staff) {
-                elems.push(
-                    <form onSubmit={this.handleSignIn}>
-                        <input type="text" ref="sunet_id" placeholder="SUNet ID" />
-                        <input type="submit" value="Sign in" />
-                    </form>
-                );
-            }
-            helpersElem = (
-                <ul>{_.map(elems, function(e) { return <li>{e}</li>; })}</ul>
+            elems.push(
+                <ul className="helper-list">
+                    {_.map(this.props.helpers, this.renderHelper)}
+                </ul>
+            );
+        }
+
+        if (this.props.staff) {
+            elems.push(
+                <form className="helper-sign-in" onSubmit={this.handleSignIn}>
+                    <input type="text" ref="sunet_id" placeholder="SUNet ID" />
+                    <input className="btn btn-primary" type="submit" value="Sign in" />
+                </form>
             );
         }
 
         return (
-            <div className="active-helpers">
-                <h3>Active Helpers</h3>
-                {helpersElem}
+            <div className="active-helpers content-pane">
+                {elems}
             </div>
         );
     }
