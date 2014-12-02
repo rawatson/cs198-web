@@ -6,8 +6,11 @@ module.exports = React.createClass({
     handleSignIn: function(e) {
         e.preventDefault();
 
-        person_id = this.refs.sunet_id.getDOMNode().value;
-        Api.Helpers.checkin(person_id).then(function(helper) {
+        var formItem = this.refs.sunet_id.getDOMNode();
+        var personId = formItem.value;
+
+        Api.Helpers.checkin(personId).then(function(helper) {
+            formItem.value = "";
             helper = helper.data;
             var helpers = this.props.helpers;
 
@@ -39,18 +42,30 @@ module.exports = React.createClass({
     },
     renderHelper: function(helper) {
         var elems = [];
+
         if (this.props.staff) {
+            var className = "helper-sign-out list-btn";
+            var handler;
+            if (helper.help_request) {
+                className += " invisible";
+                handler = function(e) { e.preventDefault(); };
+            } else {
+                handler = this.handleSignOut.bind(this, helper.id);
+            }
             elems.push(
-                <a href="#" className="helper-sign-out list-btn"
-                    onClick={this.handleSignOut.bind(this, helper.id)}>
+                <a href="#" className={className} onClick={handler}>
                     <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </a>);
         }
         elems.push(
-            <span className="active-helpers-name">
+            <span className="active-helper-name">
                 {helper.person.first_name + " " + helper.person.last_name}
             </span>
         );
+
+        if (helper.help_request) {
+            elems.push(<span className="active-helper-status">Busy</span>);
+        }
         return <li>{elems}</li>;
     },
     render: function() {
