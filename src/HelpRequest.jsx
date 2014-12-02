@@ -100,7 +100,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div class="help-request">
+            <div className="help-request">
                 {elems}
             </div>
         );
