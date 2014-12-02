@@ -129,8 +129,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="help-requests">
-                <h3>Help Requests</h3>
+            <div className="content-pane help-requests">
                 {requestsElem}
             </div>
         );
