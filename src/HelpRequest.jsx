@@ -43,43 +43,23 @@ module.exports = React.createClass({
     },
     render: function() {
         var request = this.props.request;
+        var helper;
 
-        var elems = [
-            <div className="request-info">
-                <span className="request-student">
-                    {request.person.first_name} {request.person.last_name}
-                </span>
-                <span className="request-description">
-                    {request.description}
-                </span>
-                <span className="request-course">
-                    {request.course.code}
-                </span>
-                <span className="request-location">
-                    {request.location}
-                </span>
-                <span className="request-timestamp">
-                    {moment(request.created_at).format("h:mm A MMM D, YYYY")}
-                </span>
-            </div>
-        ];
-
+        var assignElems = [];
         if (request.helper) {
-            var helper = request.helper.person;
+            helper = request.helper.person;
             var resolveRequestHandler = function(reason, e) {
                 e.preventDefault();
                 this.resolveRequest("resolved");
             };
 
-            elems.push(
-                <span className="request-assignment">
-                    Assigned to {helper.first_name} {helper.last_name}
-                </span>);
-            elems.push(
-                <button onClick={resolveRequestHandler.bind(this, "left")}>Student left</button>);
-            elems.push(
-                <button onClick={resolveRequestHandler.bind(this, "resolved")}>Resolved</button>);
-            elems.push(<AssignHelperForm
+            assignElems.push(
+                <button className="btn btn-default"
+                    onClick={resolveRequestHandler.bind(this, "left")}>Student left</button>);
+            assignElems.push(
+                <button className="btn btn-primary"
+                    onClick={resolveRequestHandler.bind(this, "resolved")}>Resolved</button>);
+            assignElems.push(<AssignHelperForm
                 availableHelpers={this.availableHelpers()}
                 callback={this.reassignRequest}
                 prompt="Reassign to..." verb="reassign" />);
@@ -93,14 +73,53 @@ module.exports = React.createClass({
                 prompt = "Reopen and assign to...";
                 verb = "reopen";
             }
-            elems.push(<AssignHelperForm
+            assignElems.push(<AssignHelperForm
                 availableHelpers={this.availableHelpers()}
                 callback={this.assignRequest}
                 prompt={prompt} verb={verb} />);
         }
 
+        var elems = [
+            <div className="row">
+                <div className="row-items col-lg-4 col-md-2">
+                    <span className="request-student">
+                        {request.person.first_name + " " + request.person.last_name}
+                    </span>
+                    <span className="request-course">
+                        {request.course.code}
+                    </span>
+                </div>
+                <div className="row-items assign-btns col-md-10 col-lg-8">
+                    {assignElems}
+                </div>
+            </div>
+        ];
+
+        if (helper) {
+            elems.push(<div><span className="request-assignment">
+                {"Assigned to " + helper.first_name + " " + helper.last_name}
+            </span></div>);
+        }
+        elems = elems.concat([
+            <div className="request-description">
+                {request.description}
+            </div>,
+            <div>
+                <span className="request-location">
+                    {"Location: " + request.location}
+                </span>
+                <span className="request-timestamp">
+                    {moment(request.created_at).format("h:mm A MMM D, YYYY")}
+                </span>
+            </div>
+        ]);
+
+        var className = "clearfix help-request";
+        if (this.props.highlight) {
+            className += " bg-success";
+        }
         return (
-            <div className="help-request">
+            <div className={className}>
                 {elems}
             </div>
         );
