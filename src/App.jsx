@@ -16,12 +16,12 @@ var App = React.createClass({
     // TODO: don't expose links to go between each view; password protect
     render: function() {
         return (
-            <div>
+            <div className="container-fluid">
+                <this.props.activeRouteHandler />
                 <ul>
                     <li><Link to="queue">Queue</Link></li>
                     <li><Link to="signup">Sign Up</Link></li>
                 </ul>
-                <this.props.activeRouteHandler />
             </div>
         );
     }
