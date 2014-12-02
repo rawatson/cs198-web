@@ -1,7 +1,6 @@
 var React   = require('react');
 var moment  = require("moment");
 var _       = require("underscore");
-var $       = require("jquery");
 
 var Api = require('./Api.js');
 var QueueStatus = require('./QueueStatus.jsx');
