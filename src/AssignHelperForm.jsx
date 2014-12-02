@@ -14,27 +14,44 @@ module.exports = React.createClass({
                 {h.person.first_name + " " + h.person.last_name}
             </a></li>);
     },
+    enableTooltip: function() {
+        if (this.refs.assignButton) {
+            $(this.refs.assignButton.getDOMNode()).tooltip();
+        }
+    },
+    componentDidMount: function() {
+        this.enableTooltip();
+    },
+    componentDidUpdate: function() {
+        this.enableTooltip();
+    },
     render: function() {
-        var formContents;
+        var assignButton;
         if (_.isEmpty(this.props.availableHelpers)) {
-            formContents = <span className="assign-message">
-                {"Can't " + this.props.verb + "; no free helpers"}</span>;
-        } else {
-            formContents = (
-                <div className="btn-group">
-                    <button type="button" className="btn btn-default dropdown-toggle"
-                        data-toggle="dropdown" aria-expanded="false">
+            assignButton = (
+                <div ref="assignButton" aria-expanded="false" data-toggle="tooltip"
+                    data-placement="top" className="tooltip-wrapper"
+                    title={"Can't " + this.props.verb + "; all helpers busy!"}>
+                    <button type="button" className="btn btn-default" disabled="true">
                         {this.props.prompt}
                     </button>
-                    <ul className="dropdown-menu" role="menu">
-                        {_.map(this.props.availableHelpers, this.renderHelperOption)}
-                    </ul>
                 </div>);
+        } else {
+            assignButton = (
+                <button type="button" className="btn btn-default dropdown-toggle"
+                    ref="assignButton" data-toggle="dropdown" aria-expanded="false">
+                    {this.props.prompt}
+                </button>);
         }
 
         return (
             <div className="assign-helper">
-                {formContents}
+                <div className="btn-group">
+                    {assignButton}
+                    <ul className="dropdown-menu" role="menu">
+                        {_.map(this.props.availableHelpers, this.renderHelperOption)}
+                    </ul>
+                </div>
             </div>
         );
     }
