@@ -22,15 +22,18 @@ module.exports = React.createClass({
             }
         };
     },
-    renderRequestList: function(requests) {
+    renderRequestList: function(requests, opts) {
+        if (typeof opts === 'undefined') opts = {};
+
         return (
             <ul>
                 {_.map(requests, function(req) {
-                    return (
-                        <li>
-                            <HelpRequest helpers={this.props.helpers} request={req}
-                                refresh={this.props.refresh} />
-                        </li>);
+                    var elem = <HelpRequest helpers={this.props.helpers} request={req}
+                        refresh={this.props.refresh} />;
+                    if (opts.inProgress) {
+                        elem.props.progress = true;
+                    }
+                    return (<li>{elem}</li>);
                  }.bind(this))}
             </ul>
         );
@@ -40,7 +43,7 @@ module.exports = React.createClass({
         if (_.isEmpty(this.props.requests.assigned)) {
             elem = <p>No assigned requests.</p>;
         } else {
-            elem = this.renderRequestList(this.props.requests.assigned);
+            elem = this.renderRequestList(this.props.requests.assigned, {inProgress: true});
         }
 
         return (

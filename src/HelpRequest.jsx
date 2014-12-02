@@ -119,6 +119,10 @@ module.exports = React.createClass({
         if (this.props.highlight) {
             className += " bg-success";
         }
+        if (this.props.progress) {
+            className += " bg-warning";
+        }
+
         return (
             <div className={className}>
                 {elems}
