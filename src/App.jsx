@@ -1,16 +1,16 @@
 // React/routing dependencies
-var React =             require('react');
-var Router =            require('react-router');
-var Route =             Router.Route;
-var Routes =            Router.Routes;
-var NotFoundRoute =     Router.NotFoundRoute;
-var DefaultRoute =      Router.DefaultRoute;
-var Link =              Router.Link;
+var React           = require('react');
+var Router          = require('react-router');
+var Route           = Router.Route;
+var Routes          = Router.Routes;
+var NotFoundRoute   = Router.NotFoundRoute;
+var DefaultRoute    = Router.DefaultRoute;
+var Link            = Router.Link;
 
 // Components
-var HelperQueue =   require('./HelperQueue.jsx');
-var SignupBox =        require('./SignupBox.jsx');
-var NotFound =      require('./NotFound.jsx');
+var HelperQueue     = require('./HelperQueue.jsx');
+var SignupPage      = require('./SignupPage.jsx');
+var NotFound        = require('./NotFound.jsx');
 
 var App = React.createClass({
     // TODO: don't expose links to go between each view; password protect
@@ -31,7 +31,7 @@ var routes = (
     <Routes location="history">
         <Route name="app" path="/" handler={App}>
             <Route name="queue" handler={HelperQueue} />
-            <Route name="signup" handler={SignupBox} />
+            <Route name="signup" handler={SignupPage} />
             <DefaultRoute handler={NotFound} />
         </Route>
         <NotFoundRoute handler={NotFound} />
