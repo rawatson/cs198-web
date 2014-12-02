@@ -1,7 +1,15 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic);
 
-$background-light-grey: #f7f7f7;
+$break-min-sm: 768px;
+$break-min-md: 992px;
+$break-min-lg: 1200px;
+
+$background-light-grey: #fafafa;
 $border-light-grey: #dedede;
+
+$grey: #acacac;
+$dark-grey: #4a4a4a;
+
 $background-blue-splash: #008cba;
 
 *, h1, h2, h3, h4, h5, h6 {
@@ -17,8 +25,16 @@ h1 {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 300;
     margin-top: 0;
+}
+
+h1, h2 {
+    font-weight: 300;
+}
+
+h3, h4, h5, h6 {
+    font-weight: 400;
+    border-bottom: 1px $grey solid;
 }
 
 .btn {
@@ -61,10 +77,6 @@ input, select {
     }
 }
 
-.help-request {
-    text-align: left;
-}
-
 .helper-sign-in {
     padding: 4px;
     padding-top: 12px;
@@ -77,7 +89,7 @@ input, select {
 }
 
 .requests-panel {
-    padding: 0 40px;
+    padding: 0 30px;
 }
 
 a {
@@ -99,4 +111,86 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+
+.assign-helper {
+    display: inline;
+}
+
+.assign-message {
+    white-space: nowrap;
+    padding-left: 10px;
+}
+
+.assign-btns {
+    text-align: right;
+
+    @media screen and (max-width: $break-min-md) {
+        text-align: left;
+    }
+
+    @media screen and (max-width: $break-min-sm) {
+        text-align: center;
+    }
+}
+
+.request-list {
+    margin-bottom: 20px;
+}
+
+.help-request {
+    text-align: left;
+    padding: 10px;
+    border: 1px $border-light-grey solid;
+
+    .row {
+        padding: 2px;
+
+        .row-items {
+            padding-bottom: 10px;
+        }
+    }
+
+    span {
+        margin-right: 10px;
+    }
+}
+
+.request-student {
+    font-size: 1.25em;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.request-course {
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px $grey solid;
+}
+
+.request-location, .request-timestamp {
+    color: $dark-grey;
+    white-space: nowrap;
+}
+
+.request-location {
+    float: left;
+    @media screen and (max-width: $break-min-sm) {
+        display: block;
+        float: none;
+    }
+}
+.request-timestamp {
+    float: right;
+    @media screen and (max-width: $break-min-sm) {
+        display: block;
+        float: none;
+    }
+}
+
+.request-description {
+    margin: 10px 0;
+    margin-left: 20px;
+    border-left: 2px $grey solid;
+    padding: 5px;
 }
