@@ -180,12 +180,15 @@ ul {
     }
 }
 
-.request-location {
+.request-location, .request-assignment {
     float: left;
 }
 
 .request-assignment {
-    float: left;
+    @media screen and (min-width: $break-min-xs) {
+        border-left: 1px $grey solid;
+        padding-left: 10px;
+    }
 }
 
 .request-timestamp {
