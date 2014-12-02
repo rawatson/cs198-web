@@ -9,6 +9,7 @@ $background-light-grey: #fafafa;
 $border-light-grey: #dedede;
 
 $grey: #acacac;
+$mid-grey: #8a8a8a;
 $dark-grey: #4a4a4a;
 
 $background-blue-splash: #008cba;
@@ -200,4 +201,15 @@ ul {
 
 .tooltip-wrapper {
     display: inline-block;
+}
+
+.active-helper-name {
+    padding-right: 10px;
+}
+.active-helper-status {
+    color: $mid-grey;
+}
+
+.invisible {
+    visibility: hidden;
 }
