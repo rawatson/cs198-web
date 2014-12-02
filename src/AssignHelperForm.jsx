@@ -17,7 +17,8 @@ module.exports = React.createClass({
     render: function() {
         var formContents;
         if (_.isEmpty(this.props.availableHelpers)) {
-            formContents = <span>Cannot {this.props.verb}; all helpers busy.</span>;
+            formContents = <span className="assign-message">
+                {"Can't " + this.props.verb + "; no free helpers"}</span>;
         } else {
             formContents = (
                 <div className="btn-group">
@@ -32,9 +33,9 @@ module.exports = React.createClass({
         }
 
         return (
-            <form className="assign-form" onSubmit={this.submitHandler}>
+            <div className="assign-helper">
                 {formContents}
-            </form>
+            </div>
         );
     }
 });
