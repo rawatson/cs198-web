@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic);
 
+$break-min-xs: 480px;
 $break-min-sm: 768px;
 $break-min-md: 992px;
 $break-min-lg: 1200px;
@@ -129,7 +130,7 @@ ul {
         text-align: left;
     }
 
-    @media screen and (max-width: $break-min-sm) {
+    @media screen and (max-width: $break-min-xs) {
         text-align: center;
     }
 }
@@ -168,24 +169,26 @@ ul {
     border: 1px $grey solid;
 }
 
-.request-location, .request-timestamp {
+.request-location, .request-timestamp, .request-assignment {
     color: $dark-grey;
     white-space: nowrap;
+
+    @media screen and (max-width: $break-min-sm) {
+        display: block;
+        float: none;
+    }
 }
 
 .request-location {
     float: left;
-    @media screen and (max-width: $break-min-sm) {
-        display: block;
-        float: none;
-    }
 }
+
+.request-assignment {
+    float: left;
+}
+
 .request-timestamp {
     float: right;
-    @media screen and (max-width: $break-min-sm) {
-        display: block;
-        float: none;
-    }
 }
 
 .request-description {
