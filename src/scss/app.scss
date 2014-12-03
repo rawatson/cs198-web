@@ -12,7 +12,7 @@ $grey: #acacac;
 $mid-grey: #8a8a8a;
 $dark-grey: #4a4a4a;
 
-$background-blue-splash: #008cba;
+$light-blue: #008cba;
 
 *, h1, h2, h3, h4, h5, h6 {
     font-family: "Lato";
@@ -62,7 +62,7 @@ header.title {
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
-    background-color: $background-blue-splash;
+    background-color: $light-blue;
     color: #fff;
 }
 
@@ -185,6 +185,8 @@ ul {
 }
 
 .request-assignment {
+    font-weight: 700;
+    color: $light-blue;
     @media screen and (min-width: $break-min-xs) {
         border-left: 1px $grey solid;
         padding-left: 10px;
