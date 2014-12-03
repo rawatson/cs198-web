@@ -37,6 +37,11 @@ module.exports = React.createClass({
                     </button>
                 </div>);
         } else {
+            // disable tooltip if necessary
+            if (this.refs.assignButton) {
+                $(this.refs.assignButton.getDOMNode()).tooltip('hide');
+            }
+
             assignButton = (
                 <button type="button" className="btn btn-default dropdown-toggle"
                     ref="assignButton" data-toggle="dropdown" aria-expanded="false">
