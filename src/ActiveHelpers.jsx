@@ -63,7 +63,7 @@ module.exports = React.createClass({
             </span>
         );
 
-        if (helper.help_request) {
+        if (this.props.staff && helper.help_request) {
             elems.push(<span className="active-helper-status">Busy</span>);
         }
         return <li>{elems}</li>;
