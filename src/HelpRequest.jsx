@@ -97,7 +97,7 @@ module.exports = React.createClass({
 
         elems = elems.concat([
             <div className="request-description">
-                {request.description}
+                <p>{request.description}</p>
             </div>,
             <div>
                 <span className="request-location">
