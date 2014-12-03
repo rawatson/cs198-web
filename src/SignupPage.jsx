@@ -110,10 +110,11 @@ module.exports = React.createClass({
             content.push(this.renderSubmittedState());
         }
 
-        if (this.state.queueStatus.signups_enabled) {
-            content.push(<h2>Current LaIR helpers</h2>);
-            content.push(<ActiveHelpers helpers={this.state.helpers} staff={false} />);
-        }
+        // TODO: re-enable when staff pics are ready
+        //if (this.state.queueStatus.signups_enabled) {
+            //content.push(<h2>Current LaIR helpers</h2>);
+            //content.push(<ActiveHelpers helpers={this.state.helpers} staff={false} />);
+        //}
         return (
             <div className="signup-box">
                 {content}
