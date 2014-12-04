@@ -14,27 +14,15 @@ module.exports = React.createClass({
             alert(err);
         });
     },
-    reassignRequest: function(helper_id) {
+    assignRequest: function(verb, helper_id) {
         if (typeof helper_id === "string") helper_id = parseInt(helper_id);
 
-        Api.HelpRequests.reassign(this.props.request.id, helper_id).then(function() {
+        Api.HelpRequests[verb](this.props.request.id, helper_id).then(function() {
             this.props.refresh();
         }.bind(this), function(err) {
             // TODO: handle error
             alert(err);
         });
-
-    },
-    assignRequest: function(helper_id) {
-        if (typeof helper_id === "string") helper_id = parseInt(helper_id);
-
-        Api.HelpRequests.assign(this.props.request.id, helper_id).then(function() {
-            this.props.refresh();
-        }.bind(this), function(err) {
-            // TODO: handle error
-            alert(err);
-        });
-
     },
     availableHelpers: function() {
         return _.filter(this.props.helpers, function(h) {
@@ -61,21 +49,22 @@ module.exports = React.createClass({
                     onClick={resolveRequestHandler.bind(this, "resolved")}>Resolved</button>);
             assignElems.push(<AssignHelperForm
                 availableHelpers={this.availableHelpers()}
-                callback={this.reassignRequest}
+                callback={this.assignRequest.bind(this, 'reassign')}
                 prompt="Reassign to..." verb="reassign" />);
         } else {
-            var prompt;
-            var verb;
+            var prompt, verb, callback;
             if (this.props.request.open) {
                 prompt = "Assign to...";
                 verb = "assign";
+                callback = this.assignRequest.bind(this, 'assign');
             } else {
                 prompt = "Reopen and assign to...";
                 verb = "reopen";
+                callback = this.assignRequest.bind(this, 'reopen');
             }
             assignElems.push(<AssignHelperForm
                 availableHelpers={this.availableHelpers()}
-                callback={this.assignRequest}
+                callback={callback}
                 prompt={prompt} verb={verb} />);
         }
 
