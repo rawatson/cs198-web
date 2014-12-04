@@ -55,6 +55,12 @@ module.exports = {
                 new_helper_id: helper_id
             });
         },
+        reopen: function(request_id, helper_id) {
+            return $.post(apiUrl + "/lair/help_requests/" + request_id +
+                          "/assignments/reopen.json", {
+                new_helper_id: helper_id
+            });
+        },
         resolve: function(request_id, reason) {
             return $.ajax({
                 url: apiUrl + "/lair/help_requests/" + request_id + ".json",
