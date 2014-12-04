@@ -69,13 +69,9 @@ module.exports = React.createClass({
     renderStudentUnchosen: function() {
         return [
             <p>Enter your SUnetID to request or view the status of your request.</p>,
-            <ul>
-                <li>
-                    <input className="signup-form-user" type="text" ref="sunetid"
-                        placeholder="SUNet ID" onInput={this.clearErrors} />
-                </li>
-                <li><input type="submit" value="Request help" /></li>
-            </ul>
+            <input className="signup-form-user" type="text" ref="sunetid"
+                placeholder="SUNet ID" onInput={this.clearErrors} />,
+            <input className="btn btn-primary" type="submit" value="Request help" />
         ];
     },
     renderCourseFormElem: function(student) {
@@ -105,7 +101,7 @@ module.exports = React.createClass({
 
         return (
             <div className="signup-form-contents">
-                <button onClick={this.handleCancel}>Nevermind</button>
+                <button className="btn" onClick={this.handleCancel}>Nevermind</button>
                 <ul>
                     <li>
                         <span className="signup-form-user-final">
@@ -114,14 +110,16 @@ module.exports = React.createClass({
                     </li>
                     <li>{course}</li>
                     <li>
-                        <textarea rows="3" ref="description"
+                        <textarea className="form-control" rows="3" ref="description"
                             placeholder="Describe your problem..." />
                     </li>
                     <li>
                         <input type="text" ref="location"
                             placeholder="Your location" />
                     </li>
-                    <li><input type="submit" value="Request help" /></li>
+                    <li>
+                        <input className="btn btn-primary" type="submit" value="Request help" />
+                    </li>
                 </ul>
             </div>
         );
@@ -129,7 +127,10 @@ module.exports = React.createClass({
     render: function() {
         var errors;
         if (this.state.errors.length > 0) {
-            errors = (<FormErrors errors={this.state.errors} />);
+            errors =
+                <div className="col-md-4 col-md-offset-4 bg-danger pane">
+                    <FormErrors errors={this.state.errors} />
+                </div>;
         }
 
         var formElems;
@@ -140,9 +141,9 @@ module.exports = React.createClass({
         }
 
         return (
-            <form className="signup-form" onSubmit={this.handleSubmit}>
+            <form className="row signup-form" onSubmit={this.handleSubmit}>
+                <div className="col-sm-6 col-sm-offset-3 pane">{formElems}</div>
                 {errors}
-                {formElems}
             </form>
         );
 
