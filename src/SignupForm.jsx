@@ -123,6 +123,7 @@ module.exports = React.createClass({
                     <li>
                     </li>
                 </ul>
+                <img src="/img/LairMap.gif" />
             </div>
         );
     },
