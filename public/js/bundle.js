@@ -28909,7 +28909,8 @@ module.exports = React.createClass({displayName: 'exports',
                     ), 
                     React.createElement("li", null
                     )
-                )
+                ), 
+                React.createElement("img", {src: "/img/LairMap.gif"})
             )
         );
     },
