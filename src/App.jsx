@@ -18,10 +18,6 @@ var App = React.createClass({
         return (
             <div className="container-fluid">
                 <this.props.activeRouteHandler />
-                <ul>
-                    <li><Link to="queue">Queue</Link></li>
-                    <li><Link to="signup">Sign Up</Link></li>
-                </ul>
             </div>
         );
     }
