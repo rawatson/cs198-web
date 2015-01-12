@@ -98,7 +98,8 @@ module.exports = React.createClass({
 
         return (
             <div className="signup-form-contents">
-                <button className="close-btn btn" onClick={this.handleCancel}>Nevermind</button>
+                <button type="button" className="close-btn btn" onClick={this.handleCancel}>
+                    Nevermind</button>
                 <ul>
                     <li>
                         <span className="inline-label">SUNet ID:</span>
