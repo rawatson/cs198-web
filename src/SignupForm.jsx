@@ -25,7 +25,7 @@ module.exports = React.createClass({
                 return;
             }
 
-            if (student.help_requests.length > 0) {
+            if (student.help_requests && student.help_requests.length > 0) {
                 return this.props.submitCallback(student, student.help_requests[0]);
             }
 
