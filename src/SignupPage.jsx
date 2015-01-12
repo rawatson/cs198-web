@@ -28,6 +28,10 @@ module.exports = React.createClass({
         }.bind(this));
     },
     resetForm: function() {
+        if (typeof this.resetTimer !== 'undefined') {
+            clearTimeout(this.resetTimer);
+            this.resetTimer = undefined;
+        }
         this.setState({student: null});
     },
     onHelpRequest: function(student, helpRequest) {
@@ -72,22 +76,14 @@ module.exports = React.createClass({
             </div>
         ];
     },
-    renderResetHandler: function(timer) {
-        // Click handler needs to cancel the resetForm event
-        return function(timer) {
-            return function() {
-                clearTimeout(timer);
-                this.resetForm();
-            }.bind(this);
-        }.bind(this)(timer);
-    },
     renderSubmittedState: function() {
         var elems = [];
 
         // reset the form after delay
         // TODO: make the timeout visible
-        var timer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
-        var resetHandler = this.renderResetHandler(timer);
+        if (typeof this.resetTimer === 'undefined') {
+            this.resetTimer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
+        }
 
         var message;
         if (this.state.helpRequest) {
@@ -96,7 +92,7 @@ module.exports = React.createClass({
         }
         elems = elems.concat([
             <p>We will do our best to get to you as quickly as possible.</p>,
-            <button className="btn" onClick={resetHandler}>Return to request help</button>
+            <button className="btn" onClick={this.resetForm}>Return to request help</button>
         ]);
 
         return ([
