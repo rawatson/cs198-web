@@ -28,6 +28,10 @@ module.exports = React.createClass({
         }.bind(this));
     },
     resetForm: function() {
+        if (typeof this.resetTimer !== 'undefined') {
+            clearTimeout(this.resetTimer);
+            this.resetTimer = undefined;
+        }
         this.setState({student: null});
     },
     onHelpRequest: function(student, helpRequest) {
@@ -59,41 +63,46 @@ module.exports = React.createClass({
                 <p>Sorry, signups have been disabled now. Have a good day!</p>
             ];
         }
-        return (
-            <div>
-                <h1>Welcome to the LaIR</h1>
-                {elems}
+        return [
+            <header className="row title">
+                <div className="col-lg-12">
+                    <h1>Welcome to the LaIR</h1>
+                </div>
+            </header>,
+            <div className="row">
+                <div className="col-lg-12">
+                    {elems}
+                </div>
             </div>
-        );
-    },
-    renderResetHandler: function(timer) {
-        // Click handler needs to cancel the resetForm event
-        return function(timer) {
-            return function() {
-                clearTimeout(timer);
-                this.resetForm();
-            }.bind(this);
-        }.bind(this)(timer);
+        ];
     },
     renderSubmittedState: function() {
+        var elems = [];
+
         // reset the form after delay
         // TODO: make the timeout visible
-        var timer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
-        var resetHandler = this.renderResetHandler(timer);
+        if (typeof this.resetTimer === 'undefined') {
+            this.resetTimer = setTimeout(this.resetForm, this.FORM_RESET_TIMEOUT);
+        }
 
         var message;
         if (this.state.helpRequest) {
-            message = <p>{this.positionMessage(this.state.helpRequest.position)}</p>;
+            message = this.positionMessage(this.state.helpRequest.position);
+            elems.push(<p>{message}</p>);
         }
+        elems = elems.concat([
+            <p>We will do our best to get to you as quickly as possible.</p>,
+            <button className="btn" onClick={this.resetForm}>Return to request help</button>
+        ]);
 
-        return (
-            <div>
+        return ([
+            <header className="row title">
                 <h1>{this.state.student.first_name}, we have your help request!</h1>
-                {message}
-                <p>We will do our best to get to you as quickly as possible.</p>
-                <button onClick={resetHandler}>Return to request help</button>
+            </header>,
+            <div className="row">
+                {elems}
             </div>
-        );
+        ]);
     },
     componentDidMount: function() {
         this.refreshInterval = setInterval(this.refreshState, this.REFRESH_RATE);
@@ -116,7 +125,7 @@ module.exports = React.createClass({
             //content.push(<ActiveHelpers helpers={this.state.helpers} staff={false} />);
         //}
         return (
-            <div className="signup-box">
+            <div className="signup-page">
                 {content}
             </div>
         );

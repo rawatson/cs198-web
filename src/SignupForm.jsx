@@ -69,13 +69,9 @@ module.exports = React.createClass({
     renderStudentUnchosen: function() {
         return [
             <p>Enter your SUnetID to request or view the status of your request.</p>,
-            <ul>
-                <li>
-                    <input className="signup-form-user" type="text" ref="sunetid"
-                        placeholder="SUNet ID" onInput={this.clearErrors} />
-                </li>
-                <li><input type="submit" value="Request help" /></li>
-            </ul>
+            <input className="form-control signup-form-user" type="text" ref="sunetid"
+                placeholder="SUNet ID" onInput={this.clearErrors} />,
+            <input className="btn btn-primary" type="submit" value="Request help" />
         ];
     },
     renderCourseFormElem: function(student) {
@@ -85,15 +81,12 @@ module.exports = React.createClass({
                 return (<option value={c.id}>{c.code}</option>);
             });
             return (
-                <label>
-                    Course:
-                    <select ref="course">{options}</select>
-                </label>
+                <select ref="course">{options}</select>
             );
         } else {
             var c = this.state.student.courses_taking[0];
             return (
-                <span>
+                <span className="course-final">
                     {c.code}
                     <input type="hidden" ref="course" value={c.id} />
                 </span>
@@ -105,44 +98,55 @@ module.exports = React.createClass({
 
         return (
             <div className="signup-form-contents">
-                <button onClick={this.handleCancel}>Nevermind</button>
+                <button className="close-btn btn" onClick={this.handleCancel}>Nevermind</button>
                 <ul>
                     <li>
-                        <span className="signup-form-user-final">
+                        <span className="inline-label">SUNet ID:</span>
+                        <span className="user-final">
                             {this.state.student.sunet_id}
                         </span>
                     </li>
-                    <li>{course}</li>
                     <li>
-                        <textarea rows="3" ref="description"
+                        <span className="inline-label">Course:</span>
+                        {course}
+                    </li>
+                    <li>
+                        <textarea className="form-control" rows="3" ref="description"
                             placeholder="Describe your problem..." />
                     </li>
                     <li>
-                        <input type="text" ref="location"
+                        <input className="form-control student-location" type="text" ref="location"
                             placeholder="Your location" />
+                        <input className="btn btn-primary" type="submit" value="Request help" />
                     </li>
-                    <li><input type="submit" value="Request help" /></li>
+                    <li>
+                    </li>
                 </ul>
             </div>
         );
     },
     render: function() {
-        var errors;
+        var errors, formElems;
+        var className = "row signup-form";
+
         if (this.state.errors.length > 0) {
-            errors = (<FormErrors errors={this.state.errors} />);
+            errors =
+                <div className="col-md-4 col-md-offset-4 bg-danger pane">
+                    <FormErrors errors={this.state.errors} />
+                </div>;
         }
 
-        var formElems;
         if (this.state.student === null) {
             formElems = this.renderStudentUnchosen();
+            className += " form-inline";
         } else {
             formElems = this.renderStudentChosen();
         }
 
         return (
-            <form className="signup-form" onSubmit={this.handleSubmit}>
+            <form className={className} onSubmit={this.handleSubmit}>
+                <div className="col-sm-6 col-sm-offset-3 pane">{formElems}</div>
                 {errors}
-                {formElems}
             </form>
         );
 
