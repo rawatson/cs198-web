@@ -84,7 +84,8 @@ module.exports = React.createClass({
         if (this.props.staff) {
             elems.push(
                 <form className="helper-sign-in" onSubmit={this.handleSignIn}>
-                    <input type="text" ref="sunet_id" placeholder="SUNet ID" />
+                    <input type="text" className="form-control" ref="sunet_id"
+                        placeholder="SUNet ID" />
                     <input className="btn btn-primary" type="submit" value="Sign in" />
                 </form>
             );
