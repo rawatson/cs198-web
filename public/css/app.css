@@ -177,4 +177,9 @@ ul {
   .signup-form-contents li {
     margin-bottom: 10px; }
 
+.feedback-footer {
+  text-align: center;
+  background: #ececec;
+  padding: 20px; }
+
 /*# sourceMappingURL=app.css.map */

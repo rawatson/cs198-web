@@ -18,7 +18,14 @@ var App = React.createClass({displayName: 'App',
     render: function() {
         return (
             React.createElement("div", {className: "container-fluid"}, 
-                React.createElement(this.props.activeRouteHandler, null)
+                React.createElement(this.props.activeRouteHandler, null), 
+                React.createElement("footer", {className: "row"}, 
+                    React.createElement("p", {className: "col-sm-12 feedback-footer"}, 
+                        "Questions? Requests? Email me at ", React.createElement("a", {href: "mailto:osdiab@cs.stanford.edu"}, 
+                            "osdiab@cs.stanford.edu"), " or ", React.createElement("a", {
+                            href: "https://github.com/cs198/lair-queue/issues/new"}, 
+                            "file a Github issue"), ". Thanks!")
+                )
             )
         );
     }
