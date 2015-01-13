@@ -49,9 +49,10 @@ module.exports = React.createClass({
         .then(function(request) {
             request = request.data;
             return this.props.submitCallback(this.state.student, request);
-        }.bind(this), function(error) {
+        }.bind(this), function(err) {
             // TODO: handle error
-            alert(error);
+            alert("We couldn't record your request. Please ask a section leader for assistance.");
+            console.log(JSON.stringify(err));
         });
     },
     handleCancel: function(e) {
