@@ -28691,7 +28691,7 @@ module.exports = React.createClass({displayName: 'exports',
                                 staff: true})
                         ), 
                         React.createElement("div", {className: "row widget"}, 
-                            React.createElement("img", {src: "/img/LairMap.gif"})
+                            React.createElement("img", {src: "/img/LairMap.png"})
                         )
                     )
                 )
@@ -28913,7 +28913,7 @@ module.exports = React.createClass({displayName: 'exports',
                     React.createElement("li", null
                     )
                 ), 
-                React.createElement("img", {src: "/img/LairMap.gif"})
+                React.createElement("img", {src: "/img/LairMap.png"})
             )
         );
     },
