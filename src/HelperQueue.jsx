@@ -109,6 +109,9 @@ module.exports = React.createClass({
                                 refresh={this.refreshActiveHelpers}
                                 staff={true} />
                         </div>
+                        <div className="row widget">
+                            <img src="/img/LairMap.png" />
+                        </div>
                     </div>
                 </div>
             </div>
