@@ -28072,8 +28072,9 @@ module.exports = React.createClass({displayName: 'exports',
 
             this.props.refresh(helpers);
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            alert("Check-in failed; please refresh and try again.");
+            console.log(err);
         });
     },
     handleSignOut: function(helper_id, e) {
@@ -28082,8 +28083,9 @@ module.exports = React.createClass({displayName: 'exports',
                 return h.id == helper_id;
             }));
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            alert("Check-out failed; please refresh and try again.");
+            console.log(err);
         });
     },
     renderHelper: function(helper) {
@@ -28321,7 +28323,7 @@ module.exports = React.createClass({displayName: 'exports',
             this.props.refresh();
         }.bind(this), function(err) {
             // TODO: handle error
-            alert(err);
+            alert(JSON.stringify(err));
         });
     },
     assignRequest: function(verb, helper_id) {
@@ -28331,7 +28333,7 @@ module.exports = React.createClass({displayName: 'exports',
             this.props.refresh();
         }.bind(this), function(err) {
             // TODO: handle error
-            alert(err);
+            alert(JSON.stringify(err));
         });
     },
     availableHelpers: function() {
@@ -28768,6 +28770,8 @@ module.exports = React.createClass({displayName: 'exports',
             this.props.refresh(data.data);
         }.bind(this), function(err) {
             //TODO: handle errors
+            alert("Lair state couldn't be toggled; please refresh and try again.");
+            alert(JSON.stringify(err));
         });
     },
     render: function() {
@@ -28839,9 +28843,10 @@ module.exports = React.createClass({displayName: 'exports',
         .then(function(request) {
             request = request.data;
             return this.props.submitCallback(this.state.student, request);
-        }.bind(this), function(error) {
+        }.bind(this), function(err) {
             // TODO: handle error
-            alert(error);
+            alert("We couldn't record your request. Please ask a section leader for assistance.");
+            console.log(JSON.stringify(err));
         });
     },
     handleCancel: function(e) {
