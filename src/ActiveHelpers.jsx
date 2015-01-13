@@ -26,8 +26,9 @@ module.exports = React.createClass({
 
             this.props.refresh(helpers);
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            alert("Check-in failed; please refresh and try again.");
+            console.log(err);
         });
     },
     handleSignOut: function(helper_id, e) {
@@ -36,8 +37,9 @@ module.exports = React.createClass({
                 return h.id == helper_id;
             }));
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            alert("Check-out failed; please refresh and try again.");
+            console.log(err);
         });
     },
     renderHelper: function(helper) {

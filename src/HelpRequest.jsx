@@ -11,7 +11,7 @@ module.exports = React.createClass({
             this.props.refresh();
         }.bind(this), function(err) {
             // TODO: handle error
-            alert(err);
+            alert(JSON.stringify(err));
         });
     },
     assignRequest: function(verb, helper_id) {
@@ -21,7 +21,7 @@ module.exports = React.createClass({
             this.props.refresh();
         }.bind(this), function(err) {
             // TODO: handle error
-            alert(err);
+            alert(JSON.stringify(err));
         });
     },
     availableHelpers: function() {

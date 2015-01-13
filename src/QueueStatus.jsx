@@ -51,6 +51,8 @@ module.exports = React.createClass({
             this.props.refresh(data.data);
         }.bind(this), function(err) {
             //TODO: handle errors
+            alert("Lair state couldn't be toggled; please refresh and try again.");
+            alert(JSON.stringify(err));
         });
     },
     render: function() {
