@@ -110,7 +110,7 @@ module.exports = React.createClass({
                                 staff={true} />
                         </div>
                         <div className="row widget">
-                            <img src="/img/LairMap.gif" />
+                            <img src="/img/LairMap.png" />
                         </div>
                     </div>
                 </div>
