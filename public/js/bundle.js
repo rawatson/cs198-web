@@ -28689,6 +28689,9 @@ module.exports = React.createClass({displayName: 'exports',
                             React.createElement(ActiveHelpers, {helpers: this.state.helpers, 
                                 refresh: this.refreshActiveHelpers, 
                                 staff: true})
+                        ), 
+                        React.createElement("div", {className: "row widget"}, 
+                            React.createElement("img", {src: "/img/LairMap.gif"})
                         )
                     )
                 )
