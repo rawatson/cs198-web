@@ -28958,12 +28958,12 @@ var ActiveHelpers   = require('./ActiveHelpers.jsx');
 var Api             = require('./Api');
 
 module.exports = React.createClass({displayName: 'exports',
-    REFRESH_RATE: 5000, // milliseconds to refresh
+    REFRESH_RATE: 10000, // milliseconds to refresh
     getInitialState: function() {
         return {student: null, queueStatus: {signups_enabled: null}};
     },
     refreshState: function() {
-        this.refreshActiveHelpers();
+        //this.refreshActiveHelpers();
         this.refreshQueueStatus();
     },
     refreshActiveHelpers: function(data) {
