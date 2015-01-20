@@ -17,20 +17,26 @@ module.exports = React.createClass({
         var sunetId = this.refs.sunetid.getDOMNode().value;
         Api.People.find(sunetId).then(function(student) {
             student = student.data;
-            console.log(student);
-            if (student.courses_taking.length === 0) {
-                var errors = ["It doesn't look like you're taking any courses we can help " +
-                    "you with at the LaIR. Come back when you are!"];
+            Api.Courses.index({person_id: student.id, student: true}).then(function(courses) {
+                courses = courses.data;
+                if (courses.length === 0) {
+                    var errors = ["It doesn't look like you're taking any courses we can help " +
+                        "you with at the LaIR. Come back when you are!"];
+                    this.setState({errors: errors});
+                    return;
+                }
+
+                if (student.help_requests && student.help_requests.length > 0) {
+                    return this.props.submitCallback(student, student.help_requests[0]);
+                }
+
+                this.clearErrors();
+                this.setState({student: student, courses: courses});
+            }.bind(this), function(err) {
+                var errors = ["An error happened when fetching your records. Please ask a " +
+                    "section leader for help!"];
                 this.setState({errors: errors});
-                return;
-            }
-
-            if (student.help_requests && student.help_requests.length > 0) {
-                return this.props.submitCallback(student, student.help_requests[0]);
-            }
-
-            this.clearErrors();
-            this.setState({student: student});
+            });
         }.bind(this), function(error) {
             var errors = ["Oh no! We couldn't find you. Did you type your SUNet ID correctly?"];
             this.setState({errors: errors});
@@ -56,7 +62,7 @@ module.exports = React.createClass({
         });
     },
     handleCancel: function(e) {
-        this.setState({student: null});
+        this.setState({student: null, courses: null});
     },
     clearErrors: function() {
         this.setState({errors: []});
@@ -65,7 +71,7 @@ module.exports = React.createClass({
         var clearErrors = this.clearErrors;
     },
     getInitialState: function() {
-        return {errors: [], student: null};
+        return {errors: [], student: null, courses: null};
     },
     renderStudentUnchosen: function() {
         return [
@@ -77,15 +83,15 @@ module.exports = React.createClass({
     },
     renderCourseFormElem: function(student) {
         var course;
-        if (this.state.student.courses_taking.length > 1) {
-            var options = _.map(this.state.student.courses_taking, function(c) {
+        if (this.state.courses.length > 1) {
+            var options = _.map(this.state.courses, function(c) {
                 return (<option value={c.id}>{c.code}</option>);
             });
             return (
                 <select ref="course">{options}</select>
             );
         } else {
-            var c = this.state.student.courses_taking[0];
+            var c = this.state.student.courses[0];
             return (
                 <span className="course-final">
                     {c.code}
