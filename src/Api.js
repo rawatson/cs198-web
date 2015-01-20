@@ -75,5 +75,10 @@ module.exports = {
         find: function(id) {
             return $.get(apiUrl + "/people/" + id + ".json");
         }
+    },
+    Courses: {
+        index: function(opts) {
+            return $.get(apiUrl + "/courses.json", opts);
+        },
     }
 };
