@@ -123,7 +123,7 @@ module.exports = React.createClass({
                     </li>
                     <li>
                         <textarea className="form-control" rows="3" ref="description"
-                            placeholder="Describe your problem..." />
+                            placeholder="Describe your problem... (in detail, please!)" />
                     </li>
                     <li>
                         <input className="form-control student-location" type="text" ref="location"
