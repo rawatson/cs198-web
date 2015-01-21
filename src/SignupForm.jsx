@@ -14,7 +14,7 @@ module.exports = React.createClass({
         }
     },
     handleStudentSearch: function() {
-        var sunetId = this.refs.sunetid.getDOMNode().value;
+        var sunetId = this.refs.sunetid.getDOMNode().value.toLowerCase();
         Api.People.find(sunetId).then(function(student) {
             student = student.data;
             Api.Courses.index({person_id: student.id, student: true}).then(function(courses) {
