@@ -38,7 +38,8 @@ module.exports = React.createClass({
                 this.setState({errors: errors});
             });
         }.bind(this), function(error) {
-            var errors = ["Oh no! We couldn't find you. Did you type your SUNet ID correctly?"];
+            var errors = ["Oh no! We couldn't find you. Did you type your SUNet ID " +
+                "(not the number; i.e. YourID@stanford.edu) correctly?"];
             this.setState({errors: errors});
         }.bind(this));
     },
@@ -75,10 +76,12 @@ module.exports = React.createClass({
     },
     renderStudentUnchosen: function() {
         return [
-            <p>Enter your SUnetID to request or view the status of your request.</p>,
-            <input className="form-control signup-form-user" type="text" ref="sunetid"
-                placeholder="SUNet ID" onInput={this.clearErrors} />,
-            <input className="btn btn-primary" type="submit" value="Request help" />
+            <p>Enter your SUNetID to request or view the status of your request.</p>,
+            <div>
+                <input className="form-control signup-form-user" type="text" ref="sunetid"
+                    placeholder="SUNet ID (i.e. YourID@stanford.edu)" onInput={this.clearErrors} />
+                <input className="btn btn-primary" type="submit" value="Request help" />
+            </div>
         ];
     },
     renderCourseFormElem: function(student) {
