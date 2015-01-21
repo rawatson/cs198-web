@@ -28895,7 +28895,7 @@ module.exports = React.createClass({displayName: 'exports',
                 React.createElement("select", {ref: "course"}, options)
             );
         } else {
-            var c = this.state.student.courses[0];
+            var c = this.state.courses[0];
             return (
                 React.createElement("span", {className: "course-final"}, 
                     c.code, 
