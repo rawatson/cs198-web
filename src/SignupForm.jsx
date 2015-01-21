@@ -91,7 +91,7 @@ module.exports = React.createClass({
                 <select ref="course">{options}</select>
             );
         } else {
-            var c = this.state.student.courses[0];
+            var c = this.state.courses[0];
             return (
                 <span className="course-final">
                     {c.code}
