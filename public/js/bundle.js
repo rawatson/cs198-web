@@ -28842,7 +28842,8 @@ module.exports = React.createClass({displayName: 'exports',
                 this.setState({errors: errors});
             });
         }.bind(this), function(error) {
-            var errors = ["Oh no! We couldn't find you. Did you type your SUNet ID correctly?"];
+            var errors = ["Oh no! We couldn't find you. Did you type your SUNet ID " +
+                "(not the number; i.e. YourID@stanford.edu) correctly?"];
             this.setState({errors: errors});
         }.bind(this));
     },
@@ -28879,10 +28880,12 @@ module.exports = React.createClass({displayName: 'exports',
     },
     renderStudentUnchosen: function() {
         return [
-            React.createElement("p", null, "Enter your SUnetID to request or view the status of your request."),
-            React.createElement("input", {className: "form-control signup-form-user", type: "text", ref: "sunetid", 
-                placeholder: "SUNet ID", onInput: this.clearErrors}),
-            React.createElement("input", {className: "btn btn-primary", type: "submit", value: "Request help"})
+            React.createElement("p", null, "Enter your SUNetID to request or view the status of your request."),
+            React.createElement("div", null, 
+                React.createElement("input", {className: "form-control signup-form-user", type: "text", ref: "sunetid", 
+                    placeholder: "SUNet ID (i.e. YourID@stanford.edu)", onInput: this.clearErrors}), 
+                React.createElement("input", {className: "btn btn-primary", type: "submit", value: "Request help"})
+            )
         ];
     },
     renderCourseFormElem: function(student) {
