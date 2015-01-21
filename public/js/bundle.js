@@ -28947,7 +28947,7 @@ module.exports = React.createClass({displayName: 'exports',
 
         if (this.state.errors.length > 0) {
             errors =
-                React.createElement("div", {className: "col-md-4 col-md-offset-4 bg-danger pane"}, 
+                React.createElement("div", {className: "col-xs-12 col-sm-6 col-sm-offset-3 bg-danger pane"}, 
                     React.createElement(FormErrors, {errors: this.state.errors})
                 );
         }
