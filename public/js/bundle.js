@@ -28927,7 +28927,7 @@ module.exports = React.createClass({displayName: 'exports',
                     ), 
                     React.createElement("li", null, 
                         React.createElement("textarea", {className: "form-control", rows: "3", ref: "description", 
-                            placeholder: "Describe your problem..."})
+                            placeholder: "Describe your problem... (in detail, please!)"})
                     ), 
                     React.createElement("li", null, 
                         React.createElement("input", {className: "form-control student-location", type: "text", ref: "location", 
