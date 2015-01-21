@@ -143,7 +143,7 @@ module.exports = React.createClass({
 
         if (this.state.errors.length > 0) {
             errors =
-                <div className="col-md-4 col-md-offset-4 bg-danger pane">
+                <div className="col-xs-12 col-sm-6 col-sm-offset-3 bg-danger pane">
                     <FormErrors errors={this.state.errors} />
                 </div>;
         }
