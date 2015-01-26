@@ -28595,7 +28595,7 @@ var HelpRequests = require('./HelpRequests.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
     REACTIVATE_LEFT_TIMEOUT: 15, // minutes to reactivate reqs from students who left
-    REFRESH_RATE: 10000, // milliseconds to refresh
+    REFRESH_RATE: 5000,          // milliseconds to refresh
     refreshState: function() {
         this.refreshActiveHelpers();
         this.refreshHelpRequests();
@@ -28822,10 +28822,24 @@ module.exports = React.createClass({displayName: 'exports',
         Api.People.find(sunetId).then(function(student) {
             student = student.data;
             Api.Courses.index({person_id: student.id, student: true}).then(function(courses) {
+                var errors = [];
                 courses = courses.data;
+
                 if (courses.length === 0) {
-                    var errors = ["It doesn't look like you're taking any courses we can help " +
-                        "you with at the LaIR. Come back when you are!"];
+                    errors.push("It doesn't look like you're taking any courses we can help " +
+                        "you with at the LaIR. Come back when you are!");
+                }
+
+                // invariant: recentRequests should be array of length 0 or 1
+                recentRequests = _.filter(this.props.recentRequests, function(r) {
+                    return (r.person.sunet_id == sunetId);
+                });
+                if (recentRequests.length > 0) {
+                    errors.push("Sorry, but you need to wait at least 15 minutes since your " +
+                        "previous request before you can ask for more help. Come back soon!");
+                }
+
+                if (!_.isEmpty(errors)) {
                     this.setState({errors: errors});
                     return;
                 }
@@ -28971,12 +28985,14 @@ module.exports = React.createClass({displayName: 'exports',
 
 },{"./Api.js":"/Users/osdiab/projects/cs198/lair-queue/src/Api.js","./FormErrors.jsx":"/Users/osdiab/projects/cs198/lair-queue/src/FormErrors.jsx","react":"/Users/osdiab/projects/cs198/lair-queue/node_modules/react/react.js","underscore":"/Users/osdiab/projects/cs198/lair-queue/node_modules/underscore/underscore.js"}],"/Users/osdiab/projects/cs198/lair-queue/src/SignupPage.jsx":[function(require,module,exports){
 var React           = require('react');
+var moment          = require('moment');
 
 var SignupForm      = require('./SignupForm.jsx');
 var ActiveHelpers   = require('./ActiveHelpers.jsx');
 var Api             = require('./Api');
 
 module.exports = React.createClass({displayName: 'exports',
+    PREV_REQUEST_TIMEOUT: 15, // minutes to allow students to make a new request
     REFRESH_RATE: 10000, // milliseconds to refresh
     getInitialState: function() {
         return {student: null, queueStatus: {signups_enabled: null}};
@@ -28984,6 +29000,15 @@ module.exports = React.createClass({displayName: 'exports',
     refreshState: function() {
         //this.refreshActiveHelpers();
         this.refreshQueueStatus();
+        this.refreshRecentRequests();
+    },
+    refreshRecentRequests: function() {
+        Api.HelpRequests.index({
+            open: false,
+            since: moment().subtract(this.PREV_REQUEST_TIMEOUT, "minutes").utc().format()
+        }).then(function(data) {
+            this.setState({ recentRequests: data.data });
+        }.bind(this));
     },
     refreshActiveHelpers: function(data) {
         if (data) return this.setState({ helpers: data });
@@ -29024,7 +29049,8 @@ module.exports = React.createClass({displayName: 'exports',
         var elems;
         if (this.state.queueStatus.signups_enabled === true) {
             elems = [
-                React.createElement(SignupForm, {submitCallback: this.onHelpRequest})
+                React.createElement(SignupForm, {submitCallback: this.onHelpRequest, 
+                            recentRequests: this.state.recentRequests})
             ];
         } else if (this.state.queueStatus.signups_enabled === null) {
             elems = [
@@ -29104,7 +29130,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./ActiveHelpers.jsx":"/Users/osdiab/projects/cs198/lair-queue/src/ActiveHelpers.jsx","./Api":"/Users/osdiab/projects/cs198/lair-queue/src/Api.js","./SignupForm.jsx":"/Users/osdiab/projects/cs198/lair-queue/src/SignupForm.jsx","react":"/Users/osdiab/projects/cs198/lair-queue/node_modules/react/react.js"}]},{},["./src/App.jsx"])
+},{"./ActiveHelpers.jsx":"/Users/osdiab/projects/cs198/lair-queue/src/ActiveHelpers.jsx","./Api":"/Users/osdiab/projects/cs198/lair-queue/src/Api.js","./SignupForm.jsx":"/Users/osdiab/projects/cs198/lair-queue/src/SignupForm.jsx","moment":"/Users/osdiab/projects/cs198/lair-queue/node_modules/moment/moment.js","react":"/Users/osdiab/projects/cs198/lair-queue/node_modules/react/react.js"}]},{},["./src/App.jsx"])
 
 
 //# sourceMappingURL=bundle.js.map
