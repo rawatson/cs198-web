@@ -1,10 +1,12 @@
 var React           = require('react');
+var moment          = require('moment');
 
 var SignupForm      = require('./SignupForm.jsx');
 var ActiveHelpers   = require('./ActiveHelpers.jsx');
 var Api             = require('./Api');
 
 module.exports = React.createClass({
+    PREV_REQUEST_TIMEOUT: 15, // minutes to allow students to make a new request
     REFRESH_RATE: 10000, // milliseconds to refresh
     getInitialState: function() {
         return {student: null, queueStatus: {signups_enabled: null}};
@@ -12,6 +14,15 @@ module.exports = React.createClass({
     refreshState: function() {
         //this.refreshActiveHelpers();
         this.refreshQueueStatus();
+        this.refreshRecentRequests();
+    },
+    refreshRecentRequests: function() {
+        Api.HelpRequests.index({
+            open: false,
+            since: moment().subtract(this.PREV_REQUEST_TIMEOUT, "minutes").utc().format()
+        }).then(function(data) {
+            this.setState({ recentRequests: data.data });
+        }.bind(this));
     },
     refreshActiveHelpers: function(data) {
         if (data) return this.setState({ helpers: data });
@@ -52,7 +63,8 @@ module.exports = React.createClass({
         var elems;
         if (this.state.queueStatus.signups_enabled === true) {
             elems = [
-                <SignupForm submitCallback={this.onHelpRequest} />
+                <SignupForm submitCallback={this.onHelpRequest}
+                            recentRequests={this.state.recentRequests} />
             ];
         } else if (this.state.queueStatus.signups_enabled === null) {
             elems = [

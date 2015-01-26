@@ -18,10 +18,24 @@ module.exports = React.createClass({
         Api.People.find(sunetId).then(function(student) {
             student = student.data;
             Api.Courses.index({person_id: student.id, student: true}).then(function(courses) {
+                var errors = [];
                 courses = courses.data;
+
                 if (courses.length === 0) {
-                    var errors = ["It doesn't look like you're taking any courses we can help " +
-                        "you with at the LaIR. Come back when you are!"];
+                    errors.push("It doesn't look like you're taking any courses we can help " +
+                        "you with at the LaIR. Come back when you are!");
+                }
+
+                // invariant: recentRequests should be array of length 0 or 1
+                recentRequests = _.filter(this.props.recentRequests, function(r) {
+                    return (r.person.sunet_id == sunetId);
+                });
+                if (recentRequests.length > 0) {
+                    errors.push("Sorry, but you need to wait at least 15 minutes since your " +
+                        "previous request before you can ask for more help. Come back soon!");
+                }
+
+                if (!_.isEmpty(errors)) {
                     this.setState({errors: errors});
                     return;
                 }
