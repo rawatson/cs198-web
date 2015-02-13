@@ -1,8 +1,7 @@
 var _       = require("underscore");
 var moment  = require("moment");
-var $       = require("jquery");
 
-var apiUrl = "http://localhost:3000";
+var apiUrl = "http://prod-env-tfquxfu9vd.elasticbeanstalk.com";
 module.exports = {
     Helpers: {
         find: function(id) {
@@ -56,6 +55,12 @@ module.exports = {
                 new_helper_id: helper_id
             });
         },
+        reopen: function(request_id, helper_id) {
+            return $.post(apiUrl + "/lair/help_requests/" + request_id +
+                          "/assignments/reopen.json", {
+                new_helper_id: helper_id
+            });
+        },
         resolve: function(request_id, reason) {
             return $.ajax({
                 url: apiUrl + "/lair/help_requests/" + request_id + ".json",
@@ -70,5 +75,10 @@ module.exports = {
         find: function(id) {
             return $.get(apiUrl + "/people/" + id + ".json");
         }
+    },
+    Courses: {
+        index: function(opts) {
+            return $.get(apiUrl + "/courses.json", opts);
+        },
     }
 };

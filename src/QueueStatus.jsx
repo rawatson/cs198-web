@@ -2,12 +2,38 @@ var React = require('react');
 var Api = require('./Api');
 
 module.exports = React.createClass({
+    enableTooltip: function() {
+        if (this.refs.enableLink) {
+            $(this.refs.enableLink.getDOMNode()).tooltip();
+        }
+    },
+    fixTooltip: function() {
+        if (this.refs.enableLink) {
+            var link = this.refs.enableLink.getDOMNode();
+            $(link).tooltip('fixTitle');
+        }
+    },
+    componentDidMount: function() {
+        this.enableTooltip();
+    },
+    componentDidUpdate: function() {
+        this.fixTooltip();
+    },
     enabledMessage: function(enabled) {
         if (enabled === null) {
-            return "Loading queue status...";
+            return <span>Loading queue status...</span>;
         }
+        var actionText = (enabled ? "Disable" : "Enable");
+        var link = (
+            <a href="#" ref="enableLink"
+                onClick={this.handleToggleEnabled}
+                data-toggle="tooltip"
+                data-placement="top"
+                title={actionText}>
+                {(enabled ? "enabled" : "disabled")}
+            </a>);
 
-        return "Signups " + (enabled ? "enabled" : "disabled");
+        return <span>Signups {link}</span>;
     },
     numRequestsMessage: function(numRequests) {
         if (numRequests === 1) {
@@ -15,13 +41,18 @@ module.exports = React.createClass({
         }
         return (numRequests === null ? "?" : numRequests) + " unclaimed requests";
     },
-    handleToggleEnabled: function() {
+    handleToggleEnabled: function(e) {
+        e.preventDefault();
+        $(this.refs.enableLink.getDOMNode()).tooltip('hide');
+
         if (this.props.enabled === null) return;
         var enabled = !this.props.enabled;
         Api.LairState.update({signups_enabled: enabled}).then(function(data) {
-            this.props.refresh(data);
+            this.props.refresh(data.data);
         }.bind(this), function(err) {
             //TODO: handle errors
+            alert("Lair state couldn't be toggled; please refresh and try again.");
+            alert(JSON.stringify(err));
         });
     },
     render: function() {
@@ -31,12 +62,10 @@ module.exports = React.createClass({
         var toggleEnabled = this.props.enabled !== null;
 
         return (
-            <div className="queue-status">
+            <div className="content-pane queue-status">
                 <ul>
-                    <li><span>{openStatusMessage}</span></li>
+                    <li>{openStatusMessage}</li>
                     <li><span>{numRequestsMessage}</span></li>
-                    <li><button onClick={this.handleToggleEnabled}
-                                disabled={!toggleEnabled}>Toggle</button></li>
                 </ul>
             </div>
         );
