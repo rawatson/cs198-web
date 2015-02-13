@@ -9,7 +9,7 @@ var HelpRequests = require('./HelpRequests.jsx');
 
 module.exports = React.createClass({
     REACTIVATE_LEFT_TIMEOUT: 15, // minutes to reactivate reqs from students who left
-    REFRESH_RATE: 5000, // milliseconds to refresh
+    REFRESH_RATE: 5000,          // milliseconds to refresh
     refreshState: function() {
         this.refreshActiveHelpers();
         this.refreshHelpRequests();
@@ -114,6 +114,13 @@ module.exports = React.createClass({
                         </div>
                     </div>
                 </div>
+                <footer className="row">
+                    <p className="col-sm-12 feedback-footer">
+                        Questions? Requests? Email me at <a href="mailto:osdiab@cs.stanford.edu">
+                            osdiab@cs.stanford.edu</a> or <a
+                            href="https://github.com/cs198/lair-queue/issues/new">
+                            file a Github issue</a>. Thanks!</p>
+                </footer>
             </div>
         );
     }
