@@ -11,7 +11,7 @@ module.exports = React.createClass({
             this.props.refresh();
         }.bind(this), function(err) {
             // TODO: handle error
-            alert(err);
+            alert(JSON.stringify(err));
         });
     },
     assignRequest: function(verb, helper_id) {
@@ -20,8 +20,20 @@ module.exports = React.createClass({
         Api.HelpRequests[verb](this.props.request.id, helper_id).then(function() {
             this.props.refresh();
         }.bind(this), function(err) {
+            if (err.readyState == 4 && err.status >= 400 && err.status < 500) {
+                var apiError = err.responseJSON.data;
+                // TODO: format error properly
+                if (apiError.message == "Validation error" &&
+                    apiError.details.errors.includes("Help request is already assigned")
+                   ) {
+                    alert("Looks like that request has already been taken. Try again!");
+                    return;
+                }
+            }
+
             // TODO: handle error
-            alert(err);
+            alert("Assigning failed; please try again.");
+            console.log(err);
         });
     },
     availableHelpers: function() {

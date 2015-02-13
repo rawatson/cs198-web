@@ -14,25 +14,46 @@ module.exports = React.createClass({
         }
     },
     handleStudentSearch: function() {
-        var sunetId = this.refs.sunetid.getDOMNode().value;
+        var sunetId = this.refs.sunetid.getDOMNode().value.toLowerCase();
         Api.People.find(sunetId).then(function(student) {
             student = student.data;
-            console.log(student);
-            if (student.courses_taking.length === 0) {
-                var errors = ["It doesn't look like you're taking any courses we can help " +
-                    "you with at the LaIR. Come back when you are!"];
+            Api.Courses.index({person_id: student.id, student: true}).then(function(courses) {
+                var errors = [];
+                courses = courses.data;
+
+                if (courses.length === 0) {
+                    errors.push("It doesn't look like you're taking any courses we can help " +
+                        "you with at the LaIR. Come back when you are!");
+                }
+
+                // invariant: recentRequests should be array of length 0 or 1
+                recentRequests = _.filter(this.props.recentRequests, function(r) {
+                    return (r.person.sunet_id == sunetId);
+                });
+                if (recentRequests.length > 0) {
+                    errors.push("Sorry, but you need to wait at least 15 minutes since your " +
+                        "previous request before you can ask for more help. Come back soon!");
+                }
+
+                if (!_.isEmpty(errors)) {
+                    this.setState({errors: errors});
+                    return;
+                }
+
+                if (student.help_requests && student.help_requests.length > 0) {
+                    return this.props.submitCallback(student, student.help_requests[0]);
+                }
+
+                this.clearErrors();
+                this.setState({student: student, courses: courses});
+            }.bind(this), function(err) {
+                var errors = ["An error happened when fetching your records. Please ask a " +
+                    "section leader for help!"];
                 this.setState({errors: errors});
-                return;
-            }
-
-            if (student.help_requests.length > 0) {
-                return this.props.submitCallback(student, student.help_requests[0]);
-            }
-
-            this.clearErrors();
-            this.setState({student: student});
+            });
         }.bind(this), function(error) {
-            var errors = ["Oh no! We couldn't find you. Did you type your SUNet ID correctly?"];
+            var errors = ["Oh no! We couldn't find you. Did you type your SUNet ID " +
+                "(not the number; i.e. YourID@stanford.edu) correctly?"];
             this.setState({errors: errors});
         }.bind(this));
     },
@@ -49,13 +70,14 @@ module.exports = React.createClass({
         .then(function(request) {
             request = request.data;
             return this.props.submitCallback(this.state.student, request);
-        }.bind(this), function(error) {
+        }.bind(this), function(err) {
             // TODO: handle error
-            alert(error);
+            alert("We couldn't record your request. Please ask a section leader for assistance.");
+            console.log(JSON.stringify(err));
         });
     },
     handleCancel: function(e) {
-        this.setState({student: null});
+        this.setState({student: null, courses: null});
     },
     clearErrors: function() {
         this.setState({errors: []});
@@ -64,27 +86,29 @@ module.exports = React.createClass({
         var clearErrors = this.clearErrors;
     },
     getInitialState: function() {
-        return {errors: [], student: null};
+        return {errors: [], student: null, courses: null};
     },
     renderStudentUnchosen: function() {
         return [
-            <p>Enter your SUnetID to request or view the status of your request.</p>,
-            <input className="form-control signup-form-user" type="text" ref="sunetid"
-                placeholder="SUNet ID" onInput={this.clearErrors} />,
-            <input className="btn btn-primary" type="submit" value="Request help" />
+            <p>Enter your SUNetID to request or view the status of your request.</p>,
+            <div>
+                <input className="form-control signup-form-user" type="text" ref="sunetid"
+                    placeholder="SUNet ID (i.e. YourID@stanford.edu)" onInput={this.clearErrors} />
+                <input className="btn btn-primary" type="submit" value="Request help" />
+            </div>
         ];
     },
     renderCourseFormElem: function(student) {
         var course;
-        if (this.state.student.courses_taking.length > 1) {
-            var options = _.map(this.state.student.courses_taking, function(c) {
+        if (this.state.courses.length > 1) {
+            var options = _.map(this.state.courses, function(c) {
                 return (<option value={c.id}>{c.code}</option>);
             });
             return (
                 <select ref="course">{options}</select>
             );
         } else {
-            var c = this.state.student.courses_taking[0];
+            var c = this.state.courses[0];
             return (
                 <span className="course-final">
                     {c.code}
@@ -98,7 +122,8 @@ module.exports = React.createClass({
 
         return (
             <div className="signup-form-contents">
-                <button className="close-btn btn" onClick={this.handleCancel}>Nevermind</button>
+                <button type="button" className="close-btn btn" onClick={this.handleCancel}>
+                    Nevermind</button>
                 <ul>
                     <li>
                         <span className="inline-label">SUNet ID:</span>
@@ -112,7 +137,7 @@ module.exports = React.createClass({
                     </li>
                     <li>
                         <textarea className="form-control" rows="3" ref="description"
-                            placeholder="Describe your problem..." />
+                            placeholder="Describe your problem... (in detail, please!)" />
                     </li>
                     <li>
                         <input className="form-control student-location" type="text" ref="location"
@@ -122,6 +147,7 @@ module.exports = React.createClass({
                     <li>
                     </li>
                 </ul>
+                <img src="/img/LairMap.png" />
             </div>
         );
     },
@@ -131,7 +157,7 @@ module.exports = React.createClass({
 
         if (this.state.errors.length > 0) {
             errors =
-                <div className="col-md-4 col-md-offset-4 bg-danger pane">
+                <div className="col-xs-12 col-sm-6 col-sm-offset-3 bg-danger pane">
                     <FormErrors errors={this.state.errors} />
                 </div>;
         }
