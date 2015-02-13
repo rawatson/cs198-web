@@ -84,6 +84,9 @@ input, select {
     input[type=text] {
         width: 110px;
     }
+    input {
+        float: left;
+    }
 }
 
 .requests-panel {
@@ -248,4 +251,14 @@ ul {
     li {
         margin-bottom: 10px;
     }
+}
+
+.signup-form-user {
+    min-width: 280px;
+}
+
+.feedback-footer {
+    text-align: center;
+    background: #ececec;
+    padding: 20px;
 }

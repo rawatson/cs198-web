@@ -1,7 +1,7 @@
 var _       = require("underscore");
 var moment  = require("moment");
 
-var apiUrl = "http://localhost:3000";
+var apiUrl = "http://prod-env-tfquxfu9vd.elasticbeanstalk.com";
 module.exports = {
     Helpers: {
         find: function(id) {
@@ -75,5 +75,10 @@ module.exports = {
         find: function(id) {
             return $.get(apiUrl + "/people/" + id + ".json");
         }
+    },
+    Courses: {
+        index: function(opts) {
+            return $.get(apiUrl + "/courses.json", opts);
+        },
     }
 };
