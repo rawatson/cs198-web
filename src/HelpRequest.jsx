@@ -11,30 +11,30 @@ module.exports = React.createClass({
             this.props.refresh();
         }.bind(this), function(err) {
             // TODO: handle error
-            alert(err);
+            alert(JSON.stringify(err));
         });
     },
-    reassignRequest: function(helper_id) {
+    assignRequest: function(verb, helper_id) {
         if (typeof helper_id === "string") helper_id = parseInt(helper_id);
 
-        Api.HelpRequests.reassign(this.props.request.id, helper_id).then(function() {
+        Api.HelpRequests[verb](this.props.request.id, helper_id).then(function() {
             this.props.refresh();
         }.bind(this), function(err) {
+            if (err.readyState == 4 && err.status >= 400 && err.status < 500) {
+                var apiError = err.responseJSON.data;
+                // TODO: format error properly
+                if (apiError.message == "Validation error" &&
+                    apiError.details.errors.includes("Help request is already assigned")
+                   ) {
+                    alert("Looks like that request has already been taken. Try again!");
+                    return;
+                }
+            }
+
             // TODO: handle error
-            alert(err);
+            alert("Assigning failed; please try again.");
+            console.log(err);
         });
-
-    },
-    assignRequest: function(helper_id) {
-        if (typeof helper_id === "string") helper_id = parseInt(helper_id);
-
-        Api.HelpRequests.assign(this.props.request.id, helper_id).then(function() {
-            this.props.refresh();
-        }.bind(this), function(err) {
-            // TODO: handle error
-            alert(err);
-        });
-
     },
     availableHelpers: function() {
         return _.filter(this.props.helpers, function(h) {
@@ -43,64 +43,89 @@ module.exports = React.createClass({
     },
     render: function() {
         var request = this.props.request;
+        var helper;
 
-        var elems = [
-            <div className="request-info">
-                <span className="request-student">
-                    {request.person.first_name} {request.person.last_name}
-                </span>
-                <span className="request-description">
-                    {request.description}
-                </span>
-                <span className="request-course">
-                    {request.course.code}
-                </span>
-                <span className="request-location">
-                    {request.location}
-                </span>
-                <span className="request-timestamp">
-                    {moment(request.created_at).format("h:mm A MMM D, YYYY")}
-                </span>
-            </div>
-        ];
-
+        var assignElems = [];
         if (request.helper) {
-            var helper = request.helper.person;
+            helper = request.helper.person;
             var resolveRequestHandler = function(reason, e) {
                 e.preventDefault();
                 this.resolveRequest("resolved");
             };
 
-            elems.push(
-                <span className="request-assignment">
-                    Assigned to {helper.first_name} {helper.last_name}
-                </span>);
-            elems.push(
-                <button onClick={resolveRequestHandler.bind(this, "left")}>Student left</button>);
-            elems.push(
-                <button onClick={resolveRequestHandler.bind(this, "resolved")}>Resolved</button>);
-            elems.push(<AssignHelperForm
+            assignElems.push(
+                <button className="btn btn-default"
+                    onClick={resolveRequestHandler.bind(this, "left")}>Student left</button>);
+            assignElems.push(
+                <button className="btn btn-primary"
+                    onClick={resolveRequestHandler.bind(this, "resolved")}>Resolved</button>);
+            assignElems.push(<AssignHelperForm
                 availableHelpers={this.availableHelpers()}
-                callback={this.reassignRequest}
+                callback={this.assignRequest.bind(this, 'reassign')}
                 prompt="Reassign to..." verb="reassign" />);
         } else {
-            var prompt;
-            var verb;
+            var prompt, verb, callback;
             if (this.props.request.open) {
                 prompt = "Assign to...";
                 verb = "assign";
+                callback = this.assignRequest.bind(this, 'assign');
             } else {
                 prompt = "Reopen and assign to...";
                 verb = "reopen";
+                callback = this.assignRequest.bind(this, 'reopen');
             }
-            elems.push(<AssignHelperForm
+            assignElems.push(<AssignHelperForm
                 availableHelpers={this.availableHelpers()}
-                callback={this.assignRequest}
+                callback={callback}
                 prompt={prompt} verb={verb} />);
         }
 
+        var elems = [
+            <div className="row">
+                <div className="row-items col-lg-4 col-md-2">
+                    <span className="request-student">
+                        {request.person.first_name + " " + request.person.last_name}
+                    </span>
+                    <span className="request-course">
+                        {request.course.code}
+                    </span>
+                </div>
+                <div className="row-items assign-btns col-md-10 col-lg-8">
+                    {assignElems}
+                </div>
+            </div>
+        ];
+
+        elems = elems.concat([
+            <div className="request-description">
+                <p>{request.description}</p>
+            </div>,
+            <div>
+                <span className="request-location">
+                    {"Location: " + request.location}
+                </span>
+                <span className="request-timestamp">
+                    {moment(request.created_at).format("h:mm A")}
+                </span>
+            </div>
+        ]);
+
+        if (helper) {
+            elems.push(<div><span className="request-assignment">
+                {helper.first_name + " " + helper.last_name + " is helping"}
+            </span></div>);
+        }
+
+        var className = "clearfix help-request";
+        if (this.props.highlight) {
+            className += " bg-success";
+        }
+        if (this.props.progress) {
+            className += " bg-warning";
+        }
+
         return (
-            <div class="help-request">
+            <div className={className}>
                 {elems}
             </div>
         );
