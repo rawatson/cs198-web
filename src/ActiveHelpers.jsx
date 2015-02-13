@@ -6,8 +6,11 @@ module.exports = React.createClass({
     handleSignIn: function(e) {
         e.preventDefault();
 
-        person_id = this.refs.sunet_id.getDOMNode().value;
-        Api.Helpers.checkin(person_id).then(function(helper) {
+        var formItem = this.refs.sunet_id.getDOMNode();
+        var personId = formItem.value;
+
+        Api.Helpers.checkin(personId).then(function(helper) {
+            formItem.value = "";
             helper = helper.data;
             var helpers = this.props.helpers;
 
@@ -23,8 +26,17 @@ module.exports = React.createClass({
 
             this.props.refresh(helpers);
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            if (err.readyState == 4 && err.status >= 400 && err.status < 500) {
+                if (err.responseJSON.data.message == "Person not found") {
+                     // TODO: display nicely
+                    alert("Could not find a person with that user ID; check your input");
+                    return;
+                }
+            }
+
+            alert("Check-in failed; please refresh and try again.");
+            console.log(err);
         });
     },
     handleSignOut: function(helper_id, e) {
@@ -33,44 +45,65 @@ module.exports = React.createClass({
                 return h.id == helper_id;
             }));
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            alert("Check-out failed; please refresh and try again.");
+            console.log(err);
         });
     },
     renderHelper: function(helper) {
-        return (
-            <li>
-                <button className="active-helpers-sign-out"
-                        onClick={this.handleSignOut.bind(this, helper.id)}>Sign out</button>
-                <span className="active-helpers-name">
-                    {helper.person.first_name} {helper.person.last_name}
-                </span>
-            </li>
+        var elems = [];
+
+        if (this.props.staff) {
+            var className = "helper-sign-out list-btn";
+            var handler;
+            if (helper.help_request) {
+                className += " invisible";
+                handler = function(e) { e.preventDefault(); };
+            } else {
+                handler = this.handleSignOut.bind(this, helper.id);
+            }
+            elems.push(
+                <a href="#" className={className} onClick={handler}>
+                    <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>);
+        }
+        elems.push(
+            <span className="active-helper-name">
+                {helper.person.first_name + " " + helper.person.last_name}
+            </span>
         );
+
+        if (this.props.staff && helper.help_request) {
+            elems.push(<span className="active-helper-status">Busy</span>);
+        }
+        return <li>{elems}</li>;
     },
     render: function() {
-        var helpersElem;
+        var elems = [];
 
         if (this.props.helpers === null) {
-            helpersElem = (<span>Loading...</span>);
+            elems.push(<span>Loading...</span>);
         } else {
-            helpersElem = (
-                <ul>
+            elems.push(
+                <ul className="helper-list">
                     {_.map(this.props.helpers, this.renderHelper)}
-                    <li>
-                        <form onSubmit={this.handleSignIn}>
-                            <input type="text" ref="sunet_id" placeholder="SUNet ID" />
-                            <input type="submit" value="Sign in" />
-                        </form>
-                    </li>
                 </ul>
             );
         }
 
+        if (this.props.staff) {
+            elems.push(
+                <form className="helper-sign-in" onSubmit={this.handleSignIn}>
+                    <input type="text" className="form-control" ref="sunet_id"
+                        placeholder="SUNet ID" />
+                    <input className="btn btn-primary" type="submit" value="Sign in" />
+                </form>
+            );
+        }
+
         return (
-            <div className="active-helpers">
-                <h3>Active Helpers</h3>
-                {helpersElem}
+            <div className="active-helpers content-pane">
+                {elems}
             </div>
         );
     }

@@ -2,36 +2,62 @@ var React   = require('react');
 var _       = require('underscore');
 
 module.exports = React.createClass({
-    submitHandler: function(e) {
-        e.preventDefault();
-        this.props.callback(this.refs.helper.getDOMNode().value);
-    },
     renderHelperOption: function(h) {
-        // NOTE: gotcha! the below can't be
-        //      {h.person.first_name} {h.person.last_name}
-        // since that would produce two spans in an option tag, and option tags can't contain
-        // anything but text. So do string interpolation instead, so that React just inserts
-        // plain text. *FACEPALM*
-        return <option value={h.id}>{h.person.first_name + " " + h.person.last_name}</option>;
+        var handler = function(value) {
+            return function(e) {
+                e.preventDefault();
+                this.props.callback(value);
+            }.bind(this);
+        }.bind(this);
+        return (
+            <li><a href="#" onClick={handler(h.id)}>
+                {h.person.first_name + " " + h.person.last_name}
+            </a></li>);
+    },
+    enableTooltip: function() {
+        if (this.refs.assignButton) {
+            $(this.refs.assignButton.getDOMNode()).tooltip();
+        }
+    },
+    componentDidMount: function() {
+        this.enableTooltip();
+    },
+    componentDidUpdate: function() {
+        this.enableTooltip();
     },
     render: function() {
-        var formContents;
+        var assignButton;
         if (_.isEmpty(this.props.availableHelpers)) {
-            formContents = <span>Cannot {this.props.verb}; all helpers busy.</span>;
-        } else {
-            formContents = (
-                <div>
-                    <input type="submit" value={this.props.prompt} />
-                    <select ref="helper">
-                        {_.map(this.props.availableHelpers, this.renderHelperOption)}
-                    </select>
+            assignButton = (
+                <div ref="assignButton" aria-expanded="false" data-toggle="tooltip"
+                    data-placement="top" className="tooltip-wrapper"
+                    title={"Can't " + this.props.verb + "; all helpers busy!"}>
+                    <button type="button" className="btn btn-default" disabled="true">
+                        {this.props.prompt}
+                    </button>
                 </div>);
+        } else {
+            // disable tooltip if necessary
+            if (this.refs.assignButton) {
+                $(this.refs.assignButton.getDOMNode()).tooltip('hide');
+            }
+
+            assignButton = (
+                <button type="button" className="btn btn-default dropdown-toggle"
+                    ref="assignButton" data-toggle="dropdown" aria-expanded="false">
+                    {this.props.prompt}
+                </button>);
         }
 
         return (
-            <form className="assign-form" onSubmit={this.submitHandler}>
-                {formContents}
-            </form>
+            <div className="assign-helper">
+                <div className="btn-group">
+                    {assignButton}
+                    <ul className="dropdown-menu" role="menu">
+                        {_.map(this.props.availableHelpers, this.renderHelperOption)}
+                    </ul>
+                </div>
+            </div>
         );
     }
 });

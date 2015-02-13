@@ -1,0 +1,188 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic);
+*, h1, h2, h3, h4, h5, h6 {
+  font-family: "Lato"; }
+
+pre, code {
+  font-family: sans-serif; }
+
+h1 {
+  text-align: center; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0; }
+
+h1, h2 {
+  font-weight: 300; }
+
+h3, h4, h5, h6 {
+  font-weight: 400;
+  border-bottom: 1px #acacac solid; }
+
+.btn-default {
+  background-color: #fafafa; }
+
+.btn-group .dropdown-toggle.btn-default ~ .dropdown-menu {
+  background-color: #fafafa; }
+
+.widget {
+  background-color: #fafafa;
+  border: 1px #dedede solid;
+  padding: 10px;
+  margin: 10px; }
+
+header.title {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #008cba;
+  color: #fff; }
+
+input, select {
+  vertical-align: middle; }
+
+.helper-list {
+  display: inline-block;
+  text-align: left; }
+  .helper-list li span {
+    vertical-align: middle; }
+
+.helper-sign-in {
+  padding: 4px;
+  padding-top: 12px;
+  display: inline-block;
+  width: 100%; }
+  .helper-sign-in input[type=text] {
+    width: 110px; }
+  .helper-sign-in input {
+    float: left; }
+
+.requests-panel {
+  padding: 0 30px; }
+
+a:hover {
+  text-decoration: none; }
+
+a.list-btn {
+  padding: 0 4px;
+  font-weight: bold; }
+
+.hidden {
+  display: none; }
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+.assign-helper {
+  display: inline; }
+
+.assign-message {
+  white-space: nowrap;
+  padding-left: 10px; }
+
+.assign-btns {
+  text-align: right; }
+  @media screen and (max-width: 992px) {
+    .assign-btns {
+      text-align: left; } }
+  @media screen and (max-width: 480px) {
+    .assign-btns {
+      text-align: center; } }
+
+.request-list {
+  margin-bottom: 20px; }
+
+.help-request {
+  text-align: left;
+  padding: 10px;
+  border: 1px #dedede solid; }
+  .help-request .row {
+    padding: 2px; }
+    .help-request .row .row-items {
+      padding-bottom: 10px; }
+  .help-request span {
+    margin-right: 10px; }
+
+.request-student {
+  font-size: 1.25em;
+  font-weight: 700;
+  white-space: nowrap; }
+
+.request-course {
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px #acacac solid; }
+
+.request-location, .request-timestamp, .request-assignment {
+  color: #4a4a4a;
+  white-space: nowrap; }
+  @media screen and (max-width: 768px) {
+    .request-location, .request-timestamp, .request-assignment {
+      display: block;
+      float: none; } }
+
+.request-location, .request-assignment {
+  float: left; }
+
+.request-assignment {
+  font-weight: 700;
+  color: #008cba; }
+  @media screen and (min-width: 480px) {
+    .request-assignment {
+      border-left: 1px #acacac solid;
+      padding-left: 10px; } }
+
+.request-timestamp {
+  float: right; }
+
+.request-description {
+  margin: 10px 0;
+  margin-left: 20px;
+  border-left: 2px #acacac solid;
+  padding: 5px; }
+
+.tooltip-wrapper {
+  display: inline-block; }
+
+.active-helper-name {
+  padding-right: 10px; }
+
+.active-helper-status {
+  color: #8a8a8a; }
+
+.invisible {
+  visibility: hidden; }
+
+.signup-page {
+  text-align: center; }
+
+.pane {
+  padding: 10px;
+  margin-bottom: 15px; }
+
+.signup-form-contents {
+  text-align: left; }
+  .signup-form-contents .close-btn {
+    display: inline-block;
+    float: right; }
+  .signup-form-contents .inline-label {
+    padding-right: 20px; }
+  .signup-form-contents .user-final, .signup-form-contents .course-final {
+    font-weight: 700;
+    color: #008cba; }
+  .signup-form-contents input.student-location {
+    display: inline;
+    width: auto; }
+  .signup-form-contents li {
+    margin-bottom: 10px; }
+
+.signup-form-user {
+  min-width: 280px; }
+
+.feedback-footer {
+  text-align: center;
+  background: #ececec;
+  padding: 20px; }
+
+/*# sourceMappingURL=app.css.map */

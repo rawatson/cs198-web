@@ -1,7 +1,6 @@
 var React   = require('react');
 var moment  = require("moment");
 var _       = require("underscore");
-var $       = require("jquery");
 
 var Api = require('./Api.js');
 var QueueStatus = require('./QueueStatus.jsx');
@@ -10,6 +9,7 @@ var HelpRequests = require('./HelpRequests.jsx');
 
 module.exports = React.createClass({
     REACTIVATE_LEFT_TIMEOUT: 15, // minutes to reactivate reqs from students who left
+    REFRESH_RATE: 5000,          // milliseconds to refresh
     refreshState: function() {
         this.refreshActiveHelpers();
         this.refreshHelpRequests();
@@ -64,8 +64,11 @@ module.exports = React.createClass({
         };
     },
     componentDidMount: function() {
-        setInterval(this.refreshState, 5000);
+        this.refreshInterval = setInterval(this.refreshState, this.REFRESH_RATE);
         this.refreshState();
+    },
+    componentWillUnmount: function() {
+        clearInterval(this.refreshInterval);
     },
     render: function() {
         var numRequests = null;
@@ -78,19 +81,46 @@ module.exports = React.createClass({
         }
 
         return (
-            <div classname="helper-queue">
-                <h1>Helper Queue</h1>
-                <QueueStatus enabled={enabled}
-                    numRequests={numRequests}
-                    refresh={this.refreshQueueStatus}
-                />
-                <ActiveHelpers helpers={this.state.helpers}
-                    refresh={this.refreshActiveHelpers} />
-                <HelpRequests helpers={this.state.helpers} requests={this.state.requests}
-                    refresh={function() {
-                        this.refreshHelpRequests();
-                        this.refreshActiveHelpers();
-                    }.bind(this)} />
+            <div className="helper-queue">
+                <header className="row title">
+                    <h1>Helper Queue</h1>
+                </header>
+                <div className="row">
+                    <div className="col-sm-8">
+                        <div className="row requests-panel">
+                            <h2>Help requests</h2>
+                            <HelpRequests helpers={this.state.helpers} requests={this.state.requests}
+                                refresh={function() {
+                                    this.refreshHelpRequests();
+                                    this.refreshActiveHelpers();
+                                }.bind(this)} />
+                        </div>
+                    </div>
+                    <div className="col-sm-4">
+                        <div className="row widget">
+                            <h3>Queue status</h3>
+                            <QueueStatus enabled={enabled}
+                                numRequests={numRequests}
+                                refresh={this.refreshQueueStatus} />
+                        </div>
+                        <div className="row widget">
+                            <h3>Active helpers</h3>
+                            <ActiveHelpers helpers={this.state.helpers}
+                                refresh={this.refreshActiveHelpers}
+                                staff={true} />
+                        </div>
+                        <div className="row widget">
+                            <img src="/img/LairMap.png" />
+                        </div>
+                    </div>
+                </div>
+                <footer className="row">
+                    <p className="col-sm-12 feedback-footer">
+                        Questions? Requests? Email me at <a href="mailto:osdiab@cs.stanford.edu">
+                            osdiab@cs.stanford.edu</a> or <a
+                            href="https://github.com/cs198/lair-queue/issues/new">
+                            file a Github issue</a>. Thanks!</p>
+                </footer>
             </div>
         );
     }

@@ -1,0 +1,264 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic);
+
+$break-min-xs: 480px;
+$break-min-sm: 768px;
+$break-min-md: 992px;
+$break-min-lg: 1200px;
+
+$background-light-grey: #fafafa;
+$border-light-grey: #dedede;
+
+$grey: #acacac;
+$mid-grey: #8a8a8a;
+$dark-grey: #4a4a4a;
+
+$light-blue: #008cba;
+
+*, h1, h2, h3, h4, h5, h6 {
+    font-family: "Lato";
+}
+
+pre, code {
+    font-family: sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+}
+
+h1, h2 {
+    font-weight: 300;
+}
+
+h3, h4, h5, h6 {
+    font-weight: 400;
+    border-bottom: 1px $grey solid;
+}
+
+.btn-default {
+    background-color: $background-light-grey;
+}
+
+.btn-group .dropdown-toggle.btn-default ~ .dropdown-menu {
+    background-color: $background-light-grey;
+}
+
+.widget {
+    background-color: $background-light-grey;
+    border: 1px $border-light-grey solid;
+    padding: 10px;
+    margin: 10px;
+}
+
+header.title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: $light-blue;
+    color: #fff;
+}
+
+input, select {
+    vertical-align: middle;
+}
+
+.helper-list {
+    display: inline-block;
+    text-align: left;
+
+    li span {
+        vertical-align: middle;
+    }
+}
+
+.helper-sign-in {
+    padding: 4px;
+    padding-top: 12px;
+    display: inline-block;
+    width: 100%;
+
+    input[type=text] {
+        width: 110px;
+    }
+    input {
+        float: left;
+    }
+}
+
+.requests-panel {
+    padding: 0 30px;
+}
+
+a {
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+a.list-btn {
+    padding: 0 4px;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.assign-helper {
+    display: inline;
+}
+
+.assign-message {
+    white-space: nowrap;
+    padding-left: 10px;
+}
+
+.assign-btns {
+    text-align: right;
+
+    @media screen and (max-width: $break-min-md) {
+        text-align: left;
+    }
+
+    @media screen and (max-width: $break-min-xs) {
+        text-align: center;
+    }
+}
+
+.request-list {
+    margin-bottom: 20px;
+}
+
+.help-request {
+    text-align: left;
+    padding: 10px;
+    border: 1px $border-light-grey solid;
+
+    .row {
+        padding: 2px;
+
+        .row-items {
+            padding-bottom: 10px;
+        }
+    }
+
+    span {
+        margin-right: 10px;
+    }
+}
+
+.request-student {
+    font-size: 1.25em;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.request-course {
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px $grey solid;
+}
+
+.request-location, .request-timestamp, .request-assignment {
+    color: $dark-grey;
+    white-space: nowrap;
+
+    @media screen and (max-width: $break-min-sm) {
+        display: block;
+        float: none;
+    }
+}
+
+.request-location, .request-assignment {
+    float: left;
+}
+
+.request-assignment {
+    font-weight: 700;
+    color: $light-blue;
+    @media screen and (min-width: $break-min-xs) {
+        border-left: 1px $grey solid;
+        padding-left: 10px;
+    }
+}
+
+.request-timestamp {
+    float: right;
+}
+
+.request-description {
+    margin: 10px 0;
+    margin-left: 20px;
+    border-left: 2px $grey solid;
+    padding: 5px;
+}
+
+.tooltip-wrapper {
+    display: inline-block;
+}
+
+.active-helper-name {
+    padding-right: 10px;
+}
+.active-helper-status {
+    color: $mid-grey;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.signup-page {
+    text-align: center;
+}
+
+.pane {
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.signup-form-contents {
+    text-align: left;
+    .close-btn {
+        display: inline-block;
+        float: right;
+    }
+
+    .inline-label {
+        padding-right: 20px;
+    }
+
+    .user-final, .course-final {
+        font-weight: 700;
+        color: $light-blue;
+    }
+
+    input.student-location {
+        display: inline;
+        width: auto;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+}
+
+.signup-form-user {
+    min-width: 280px;
+}
+
+.feedback-footer {
+    text-align: center;
+    background: #ececec;
+    padding: 20px;
+}

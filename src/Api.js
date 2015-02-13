@@ -1,8 +1,7 @@
 var _       = require("underscore");
 var moment  = require("moment");
-var $       = require("jquery");
 
-var apiUrl = "http://localhost:3000";
+var apiUrl = "http://prod-env-tfquxfu9vd.elasticbeanstalk.com";
 module.exports = {
     Helpers: {
         find: function(id) {
@@ -42,6 +41,9 @@ module.exports = {
         index: function(opts) {
             return $.get(apiUrl + "/lair/help_requests.json", opts);
         },
+        create: function(data) {
+            return $.post(apiUrl + "/lair/help_requests.json", data);
+        },
         assign: function(request_id, helper_id) {
             return $.post(apiUrl + "/lair/help_requests/" + request_id + "/assignments.json", {
                 helper_id: helper_id
@@ -50,6 +52,12 @@ module.exports = {
         reassign: function(request_id, helper_id) {
             return $.post(apiUrl + "/lair/help_requests/" + request_id +
                           "/assignments/reassign.json", {
+                new_helper_id: helper_id
+            });
+        },
+        reopen: function(request_id, helper_id) {
+            return $.post(apiUrl + "/lair/help_requests/" + request_id +
+                          "/assignments/reopen.json", {
                 new_helper_id: helper_id
             });
         },
@@ -62,5 +70,15 @@ module.exports = {
                 type: "DELETE"
             });
         }
+    },
+    People: {
+        find: function(id) {
+            return $.get(apiUrl + "/people/" + id + ".json");
+        }
+    },
+    Courses: {
+        index: function(opts) {
+            return $.get(apiUrl + "/courses.json", opts);
+        },
     }
 };
