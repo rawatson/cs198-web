@@ -26,8 +26,17 @@ module.exports = React.createClass({
 
             this.props.refresh(helpers);
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            if (err.readyState == 4 && err.status >= 400 && err.status < 500) {
+                if (err.responseJSON.data.message == "Person not found") {
+                     // TODO: display nicely
+                    alert("Could not find a person with that user ID; check your input");
+                    return;
+                }
+            }
+
+            alert("Check-in failed; please refresh and try again.");
+            console.log(err);
         });
     },
     handleSignOut: function(helper_id, e) {
@@ -36,8 +45,9 @@ module.exports = React.createClass({
                 return h.id == helper_id;
             }));
         }.bind(this), function(err) {
-            // TODO: real error handling
-            alert(JSON.stringify(err));
+            //TODO: handle more elegantly
+            alert("Check-out failed; please refresh and try again.");
+            console.log(err);
         });
     },
     renderHelper: function(helper) {
