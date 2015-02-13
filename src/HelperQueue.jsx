@@ -9,7 +9,7 @@ var HelpRequests = require('./HelpRequests.jsx');
 
 module.exports = React.createClass({
     REACTIVATE_LEFT_TIMEOUT: 15, // minutes to reactivate reqs from students who left
-    REFRESH_RATE: 5000, // milliseconds to refresh
+    REFRESH_RATE: 5000,          // milliseconds to refresh
     refreshState: function() {
         this.refreshActiveHelpers();
         this.refreshHelpRequests();

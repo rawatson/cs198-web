@@ -177,6 +177,9 @@ ul {
   .signup-form-contents li {
     margin-bottom: 10px; }
 
+.signup-form-user {
+  min-width: 280px; }
+
 .feedback-footer {
   text-align: center;
   background: #ececec;
