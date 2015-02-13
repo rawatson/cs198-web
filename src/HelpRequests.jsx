@@ -22,15 +22,18 @@ module.exports = React.createClass({
             }
         };
     },
-    renderRequestList: function(requests) {
+    renderRequestList: function(requests, opts) {
+        if (typeof opts === 'undefined') opts = {};
+
         return (
             <ul>
                 {_.map(requests, function(req) {
-                    return (
-                        <li>
-                            <HelpRequest helpers={this.props.helpers} request={req}
-                                refresh={this.props.refresh} />
-                        </li>);
+                    var elem = <HelpRequest helpers={this.props.helpers} request={req}
+                        refresh={this.props.refresh} />;
+                    if (opts.inProgress) {
+                        elem.props.progress = true;
+                    }
+                    return (<li>{elem}</li>);
                  }.bind(this))}
             </ul>
         );
@@ -40,11 +43,11 @@ module.exports = React.createClass({
         if (_.isEmpty(this.props.requests.assigned)) {
             elem = <p>No assigned requests.</p>;
         } else {
-            elem = this.renderRequestList(this.props.requests.assigned);
+            elem = this.renderRequestList(this.props.requests.assigned, {inProgress: true});
         }
 
         return (
-            <div className="requests-assigned">
+            <div className="request-list requests-assigned">
                 <h4>In progress</h4>
                 {elem}
             </div>
@@ -68,48 +71,54 @@ module.exports = React.createClass({
                 (<HelpRequest helpers={this.props.helpers}
                               request={_.first(this.props.requests.unassigned)}
                               refresh={this.props.refresh}
-                    />),
-                (<a href=""
-                    onClick={this.toggleExpandMore("unassigned").bind(this)}>{toggleText}</a>),
-                (
-                    <div className={moreClass}>
-                        {this.renderRequestList(_.tail(this.props.requests.unassigned))}
-                    </div>
-                )
+                              highlight={true} />)
             ];
+            if (!_.isEmpty(_.tail(this.props.requests.unassigned))) {
+                elems = elems.concat([
+                    (<a href=""
+                        onClick={this.toggleExpandMore("unassigned").bind(this)}>{toggleText}</a>),
+                    (<div className={moreClass}>
+                        {this.renderRequestList(_.tail(this.props.requests.unassigned))}
+                    </div>)
+                ]);
+            }
         }
 
         return (
-            <div className="requests-unassigned">
+            <div className="request-list requests-unassigned">
                 <h4>Up next:</h4>
                 {elems}
             </div>
         );
     },
     renderClosed: function() {
-        var elem;
+        var elems;
         if (_.isEmpty(this.props.requests.closed_recently)) {
-            elem = <p>No recently closed requests.</p>;
+            elems = [<p>No recently closed requests.</p>];
         } else {
-            elem = this.renderRequestList(this.props.requests.closed_recently);
-        }
+            requestList = this.renderRequestList(this.props.requests.closed_recently);
 
-        var moreClass = "requests-more";
-        var toggleText;
-        if (!this.state.closedExpanded) {
-            moreClass += " hidden";
-            toggleText = "Expand...";
-        } else {
-            toggleText = "Collapse";
+            var moreClass = "requests-more";
+            var toggleText;
+            if (!this.state.closedExpanded) {
+                moreClass += " hidden";
+                toggleText = "Expand...";
+            } else {
+                toggleText = "Collapse";
+            }
+
+            elems = [
+                <a href="" onClick={this.toggleExpandMore("closed").bind(this)}>{toggleText}</a>,
+                <div className={moreClass}>
+                    {requestList}
+                </div>
+            ];
         }
 
         return (
-            <div className="requests-closed">
+            <div className="request-list requests-closed">
                 <h4>Recently closed</h4>
-                <a href="" onClick={this.toggleExpandMore("closed").bind(this)}>{toggleText}</a>
-                <div className={moreClass}>
-                    {elem}
-                </div>
+                {elems}
             </div>
         );
     },
@@ -129,8 +138,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="help-requests">
-                <h3>Help Requests</h3>
+            <div className="content-pane help-requests">
                 {requestsElem}
             </div>
         );

@@ -9,6 +9,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var jest = require('jest-cli');
 var jshint = require('gulp-jshint');
 var react = require('gulp-react');
+var sass = require('gulp-ruby-sass');
 
 var chalk = require('chalk');
 var _ = require('underscore');
@@ -35,18 +36,43 @@ gulp.task('browserify', function() {
   return browserifyBuild(browserifyBundler().bundle());
 });
 
-gulp.task('watch', ['build'], function() {
+gulp.task('sass', function () {
+  return gulp.src('src/scss/app.scss')
+    .pipe(sass({sourcemapPath: '../src/scss'}))
+    .pipe(gulp.dest('public/css'));
+});
+
+gulp.task('sass-log', function () {
+  return gulp.src('src/scss/app.scss')
+    .pipe(sass({sourcemapPath: '../src/scss'}))
+    .on('error', function (err) { console.log(chalk.bgRed("Sass error:") + " " + err.message); })
+    .pipe(gulp.dest('public/css'));
+});
+
+gulp.task('watch-js', ['build'], function() {
   var bundler = watchify(browserifyBundler(watchify.args));
   bundler.on('update', rebundle);
 
   function rebundle() {
-    console.log(chalk.yellow('Changes detected!'));
+    console.log(chalk.yellow('JS changes detected!'));
     return browserifyBuild(bundler.bundle()
       .on('error', gutil.log.bind(gutil, 'Browserify Error')));
   }
 
   return rebundle();
 });
+
+gulp.task('watch-css', ['build'], function() {
+  var watcher = gulp.watch('src/scss/**/*.scss', ['sass-log']);
+  watcher.on('change', function(event) {
+    console.log(chalk.yellow('SASS change detected: ') +
+                'File ' + event.path + ' was ' + event.type + ', running tasks...');
+  });
+  return watcher;
+});
+
+gulp.task('watch', ['watch-css', 'watch-js']);
+
 
 gulp.task('connect', ['build'], function() {
   connect.server({
@@ -79,7 +105,7 @@ function lint() {
 gulp.task('lint', lint);
 gulp.task('lint_after_test', ['test'], lint);
 
-gulp.task('build', ['browserify']);
+gulp.task('build', ['browserify', 'sass']);
 gulp.task('serve', ['build', 'connect', 'watch']);
 gulp.task('check', ['test', 'lint_after_test']);
 gulp.task('default', ['check']);
