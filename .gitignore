@@ -21,3 +21,9 @@ build/Release
 
 # Dependency directory
 node_modules
+.sass-cache
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
