@@ -27,12 +27,15 @@ module.exports = React.createClass({
             this.props.refresh(helpers);
         }.bind(this), function(err) {
             //TODO: handle more elegantly
-            if (err.responseJSON.data.message == "Person not found") {
-                 // TODO: display nicely
-                alert("Could not find a person with that user ID; check your input");
-            } else {
-                alert("Check-in failed; please refresh and try again.");
+            if (err.readyState == 4 && err.status >= 400 && err.status < 500) {
+                if (err.responseJSON.data.message == "Person not found") {
+                     // TODO: display nicely
+                    alert("Could not find a person with that user ID; check your input");
+                    return;
+                }
             }
+
+            alert("Check-in failed; please refresh and try again.");
             console.log(err);
         });
     },
