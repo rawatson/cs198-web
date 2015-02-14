@@ -9,7 +9,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var jest = require('jest-cli');
 var jshint = require('gulp-jshint');
 var react = require('gulp-react');
-var sass = require('gulp-ruby-sass');
+var sass = require('gulp-sass');
 
 var chalk = require('chalk');
 var _ = require('underscore');
