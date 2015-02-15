@@ -8,7 +8,7 @@ This is the CS198 web application. Currently, it contains functionality to run t
 It is a statically served frontend web application written in
 [React](http://facebook.github.io/react/).
 
-## Setup your developer environment.
+## Setup your development environment.
 
 Make sure you have `node` and `npm` installed. Then, run (without the $):
 
@@ -20,8 +20,15 @@ $ npm install
 This will install the Gulp tool, which is useful for running a number of useful commands below; and
 the rest of the development dependencies you need to run the application locally.
 
-## Run dev server
+## Run the dev server
 
+```bash
+$ gulp serve
+```
+
+Now you can view the site in your browser at `localhost:8080`.
+
+## Run tests
 
 This command builds your code, and runs the tests and linter:
 
