@@ -68,7 +68,7 @@
                 }
 
                 elems.push(
-                    <a href="#" className={className} onClick={handler}>
+                    <a href="#/" className={className} onClick={handler}>
                         <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </a>);
             }
