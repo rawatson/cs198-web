@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    var React   = require('react');
-    var _       = require('underscore');
+    var React       = require('react');
+    var _           = require('underscore');
+    var classNames  = require('classnames');
 
     var HelpRequest = require('./HelpRequest.jsx');
 
@@ -64,14 +65,10 @@
             if (_.isEmpty(this.props.requests.unassigned)) {
                 elems = [<p>No unassigned requests!</p>];
             } else {
-                var moreClass = "requests-more";
-                var toggleText;
-                if (!this.state.unassignedExpanded) {
-                    moreClass += " hidden";
-                    toggleText = "More requests...";
-                } else {
-                    toggleText = "Fewer requests";
-                }
+                var moreClass = classNames('requests-more',
+                                           { hidden: !this.state.unassignedExpanded }),
+                    toggleText = this.state.unassignedExpanded ? 'Fewer requests' :
+                                                                 'More requests...';
 
                 elems = [
                     (<HelpRequest helpers={this.props.helpers}
@@ -104,15 +101,8 @@
                 elems = [<p>No recently closed requests.</p>];
             } else {
                 var requestList = this.renderRequestList(this.props.requests.closed_recently),
-                    moreClass = "requests-more",
-                    toggleText;
-
-                if (!this.state.closedExpanded) {
-                    moreClass += " hidden";
-                    toggleText = "Expand...";
-                } else {
-                    toggleText = "Collapse";
-                }
+                    toggleText = this.state.closedExpanded ? 'Collapse' : 'Expand...',
+                    moreClass = classNames('requests-more', {hidden: !this.state.closedExpanded});
 
                 elems = [
                     <a href="" onClick={this.toggleExpandMore("closed").bind(this)}>{toggleText}</a>,

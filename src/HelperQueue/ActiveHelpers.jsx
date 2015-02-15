@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    var React   = require('react');
-    var _       = require('underscore');
+    var React       = require('react');
+    var _           = require('underscore');
+    var classNames  = require('classnames');
 
     module.exports = React.createClass({
         handleSignIn: function(e) {
@@ -56,14 +57,16 @@
             var elems = [];
 
             if (this.props.staff) {
-                var className = "helper-sign-out list-btn";
+                var className = classNames('helper-sign-out', 'list-btn',
+                                           { invisible: !!helper.help_request });
+
                 var handler;
                 if (helper.help_request) {
-                    className += " invisible";
                     handler = function(e) { e.preventDefault(); };
                 } else {
                     handler = this.handleSignOut.bind(this, helper.id);
                 }
+
                 elems.push(
                     <a href="#" className={className} onClick={handler}>
                         <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>

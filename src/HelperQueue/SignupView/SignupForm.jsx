@@ -3,6 +3,7 @@
 
     var React       = require('react');
     var _           = require('underscore');
+    var classNames  = require('classnames');
 
     var FormErrors  = require('../../shared/FormErrors.jsx');
 
@@ -155,7 +156,9 @@
         },
         render: function() {
             var errors, formElems;
-            var className = "row signup-form";
+            var className = classNames('row', 'signup-form', {
+                'form-inline': this.state.student === null
+            });
 
             if (this.state.errors.length > 0) {
                 errors =
@@ -166,7 +169,6 @@
 
             if (this.state.student === null) {
                 formElems = this.renderStudentUnchosen();
-                className += " form-inline";
             } else {
                 formElems = this.renderStudentChosen();
             }

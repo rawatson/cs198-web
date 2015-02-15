@@ -4,6 +4,7 @@
     var React   = require('react');
     var _       = require('underscore');
     var moment  = require("moment");
+    var classNames  = require('classnames');
 
     var AssignHelperForm = require("./AssignHelperForm.jsx");
 
@@ -118,13 +119,8 @@
                 </span></div>);
             }
 
-            var className = "clearfix help-request";
-            if (this.props.highlight) {
-                className += " bg-success";
-            }
-            if (this.props.progress) {
-                className += " bg-warning";
-            }
+            var className = classNames('clearfix', 'help-request', {
+                'bg-success': !!this.props.highlight, 'bg-warning': !!this.props.progress });
 
             return (
                 <div className={className}>
