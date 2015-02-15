@@ -2,8 +2,8 @@ var React           = require('react');
 var moment          = require('moment');
 
 var SignupForm      = require('./SignupForm.jsx');
-var ActiveHelpers   = require('./ActiveHelpers.jsx');
-var Api             = require('./Api');
+var ActiveHelpers   = require('../ActiveHelpers.jsx');
+var Api             = require('../../Api');
 
 module.exports = React.createClass({
     PREV_REQUEST_TIMEOUT: 15, // minutes to allow students to make a new request

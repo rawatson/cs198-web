@@ -2,7 +2,7 @@ var React   = require('react');
 var _       = require('underscore');
 var moment  = require("moment");
 
-var Api = require("./Api");
+var Api = require("../../Api");
 var AssignHelperForm = require("./AssignHelperForm.jsx");
 
 module.exports = React.createClass({

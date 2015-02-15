@@ -1,5 +1,5 @@
 var React = require('react');
-var Api = require('./Api');
+var Api = require('../../Api');
 
 module.exports = React.createClass({
     enableTooltip: function() {

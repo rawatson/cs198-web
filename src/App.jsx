@@ -8,8 +8,7 @@ var DefaultRoute    = Router.DefaultRoute;
 var Link            = Router.Link;
 
 // Components
-var HelperQueue     = require('./HelperQueue.jsx');
-var SignupPage      = require('./SignupPage.jsx');
+var HelperQueue     = require('./HelperQueue');
 var NotFound        = require('./NotFound.jsx');
 
 var App = React.createClass({
@@ -26,8 +25,8 @@ var App = React.createClass({
 var routes = (
     <Routes location="history">
         <Route name="app" path="/" handler={App}>
-            <Route name="queue" handler={HelperQueue} />
-            <Route name="signup" handler={SignupPage} />
+            <Route name="queue" handler={HelperQueue.HelperView} />
+            <Route name="signup" handler={HelperQueue.SignupView} />
             <DefaultRoute handler={NotFound} />
         </Route>
         <NotFoundRoute handler={NotFound} />

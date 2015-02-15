@@ -1,5 +1,5 @@
 var React   = require('react');
-var Api     = require('./Api');
+var Api     = require('../Api');
 var _       = require('underscore');
 
 module.exports = React.createClass({

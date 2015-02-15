@@ -2,9 +2,9 @@ var React   = require('react');
 var moment  = require("moment");
 var _       = require("underscore");
 
-var Api = require('./Api.js');
+var Api = require('../../Api.js');
 var QueueStatus = require('./QueueStatus.jsx');
-var ActiveHelpers = require('./ActiveHelpers.jsx');
+var ActiveHelpers = require('../ActiveHelpers.jsx');
 var HelpRequests = require('./HelpRequests.jsx');
 
 module.exports = React.createClass({

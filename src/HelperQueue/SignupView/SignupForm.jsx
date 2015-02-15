@@ -1,8 +1,8 @@
 var React       = require('react');
 var _           = require('underscore');
 
-var Api         = require('./Api.js');
-var FormErrors  = require('./FormErrors.jsx');
+var Api         = require('../../Api.js');
+var FormErrors  = require('../../shared/FormErrors.jsx');
 
 module.exports = React.createClass({
     handleSubmit: function(e) {
