@@ -107,5 +107,6 @@ gulp.task('lint_after_test', ['test'], lint);
 
 gulp.task('build', ['browserify', 'sass']);
 gulp.task('serve', ['build', 'connect', 'watch']);
+gulp.task('s', ['serve']);
 gulp.task('check', ['test', 'lint_after_test']);
 gulp.task('default', ['check']);
