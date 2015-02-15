@@ -1,5 +1,4 @@
 var React = require('react');
-var Api = require('../../Api');
 
 module.exports = React.createClass({
     enableTooltip: function() {
@@ -47,7 +46,7 @@ module.exports = React.createClass({
 
         if (this.props.enabled === null) return;
         var enabled = !this.props.enabled;
-        Api.LairState.update({signups_enabled: enabled}).then(function(data) {
+        this.props.api.LairState.update({signups_enabled: enabled}).then(function(data) {
             this.props.refresh(data.data);
         }.bind(this), function(err) {
             //TODO: handle errors

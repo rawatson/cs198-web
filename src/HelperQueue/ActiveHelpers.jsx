@@ -1,5 +1,4 @@
 var React   = require('react');
-var Api     = require('../Api');
 var _       = require('underscore');
 
 module.exports = React.createClass({
@@ -9,7 +8,7 @@ module.exports = React.createClass({
         var formItem = this.refs.sunet_id.getDOMNode();
         var personId = formItem.value;
 
-        Api.Helpers.checkin(personId).then(function(helper) {
+        this.props.api.Helpers.checkin(personId).then(function(helper) {
             formItem.value = "";
             helper = helper.data;
             var helpers = this.props.helpers;
@@ -40,7 +39,7 @@ module.exports = React.createClass({
         });
     },
     handleSignOut: function(helper_id, e) {
-        Api.Helpers.checkout(helper_id).then(function() {
+        this.props.api.Helpers.checkout(helper_id).then(function() {
             this.props.refresh(_.reject(this.props.helpers, function(h) {
                 return h.id == helper_id;
             }));

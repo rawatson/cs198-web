@@ -28,8 +28,11 @@ module.exports = React.createClass({
         return (
             <ul>
                 {_.map(requests, function(req) {
-                    var elem = <HelpRequest helpers={this.props.helpers} request={req}
-                        refresh={this.props.refresh} />;
+                    var elem = <HelpRequest
+                        helpers={this.props.helpers}
+                        request={req}
+                        refresh={this.props.refresh}
+                        api={this.props.api} />;
                     if (opts.inProgress) {
                         elem.props.progress = true;
                     }
@@ -71,7 +74,8 @@ module.exports = React.createClass({
                 (<HelpRequest helpers={this.props.helpers}
                               request={_.first(this.props.requests.unassigned)}
                               refresh={this.props.refresh}
-                              highlight={true} />)
+                              highlight={true}
+                              api={this.props.api} />)
             ];
             if (!_.isEmpty(_.tail(this.props.requests.unassigned))) {
                 elems = elems.concat([
