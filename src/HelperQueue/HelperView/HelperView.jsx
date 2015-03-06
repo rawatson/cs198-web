@@ -42,10 +42,20 @@
                         return !("helper" in r);
                     };
 
+                    var updatedMoreRecently = function(a, b) {
+                        if (a.updated_at < b.updated_at) {
+                            return 1;
+                        } else if (b.updated_at < a.updated_at) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    };
+
                     var requests = {
                         unassigned: _.filter(open, isUnassigned),
-                        assigned: _.reject(open, isUnassigned),
-                        closed_recently: closed_recently
+                        assigned: _.reject(open, isUnassigned).sort(updatedMoreRecently),
+                        closed_recently: closed_recently.sort(updatedMoreRecently)
                     };
 
                     this.setState({requests: requests});
