@@ -43,13 +43,7 @@
                     };
 
                     var updatedMoreRecently = function(a, b) {
-                        if (a.updated_at < b.updated_at) {
-                            return 1;
-                        } else if (b.updated_at < a.updated_at) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
+                        return moment(a.created_at).isBefore(b.created_at) ? 1 : -1;
                     };
 
                     var requests = {
