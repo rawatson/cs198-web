@@ -88,12 +88,14 @@
                 }
                 var waitTime = null;
                 if (this.state.requests !== null) {
-                    if (this.state.requests.length === 0) {
+                    if (this.state.requests.unassigned.length === 0) {
                         waitTime = "None!";
                     } else {
                         var lastRequest = _.last(this.state.requests.unassigned);
                         var earliestRequestTime = moment(lastRequest.updated_at);
-                        waitTime = earliestRequestTime.fromNow(true);
+                        waitTime = moment().toDate() - earliestRequestTime.toDate();
+                        waitTime = Math.ceil((waitTime / 1000) / 60);
+                        waitTime = waitTime + " minutes";
                     }
                 }
 
