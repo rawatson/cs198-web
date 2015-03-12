@@ -86,6 +86,16 @@
                 if (this.state.queueStatus !== null) {
                     enabled = this.state.queueStatus.signups_enabled;
                 }
+                var waitTime = null;
+                if (this.state.requests !== null) {
+                    if (this.state.requests.length === 0) {
+                        waitTime = "None!";
+                    } else {
+                        var lastRequest = _.last(this.state.requests.unassigned);
+                        var earliestRequestTime = moment(lastRequest.updated_at);
+                        waitTime = earliestRequestTime.fromNow(true);
+                    }
+                }
 
                 return (
                     <div className="helper-queue">
@@ -110,6 +120,7 @@
                                     <h3>Queue status</h3>
                                     <QueueStatus enabled={enabled}
                                         numRequests={numRequests}
+                                        waitTime={waitTime}
                                         refresh={this.refreshQueueStatus}
                                         api={api} />
                                 </div>

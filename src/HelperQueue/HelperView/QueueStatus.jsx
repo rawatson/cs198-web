@@ -43,6 +43,9 @@
             }
             return (numRequests === null ? "?" : numRequests) + " unclaimed requests";
         },
+        waitTimeMessage: function(waitTime) {
+            return "Wait time: " + (waitTime === null ? "?" : waitTime);
+        },
         handleToggleEnabled: function(e) {
             e.preventDefault();
             $(this.refs.enableLink.getDOMNode()).tooltip('hide');
@@ -60,6 +63,7 @@
         render: function() {
             // required variables for render
             var numRequestsMessage = this.numRequestsMessage(this.props.numRequests);
+            var waitTimeMessage = this.waitTimeMessage(this.props.waitTime);
             var openStatusMessage = this.enabledMessage(this.props.enabled);
             var toggleEnabled = this.props.enabled !== null;
 
@@ -68,6 +72,7 @@
                     <ul>
                         <li>{openStatusMessage}</li>
                         <li><span>{numRequestsMessage}</span></li>
+                        <li><span>{waitTimeMessage}</span></li>
                     </ul>
                 </div>
             );
