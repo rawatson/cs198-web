@@ -91,8 +91,8 @@
                     if (this.state.requests.unassigned.length === 0) {
                         waitTime = "None!";
                     } else {
-                        var lastRequest = _.last(this.state.requests.unassigned);
-                        var earliestRequestTime = moment(lastRequest.updated_at);
+                        var nextToHelp = _.first(this.state.requests.unassigned);
+                        var earliestRequestTime = moment(nextToHelp.updated_at);
                         waitTime = moment().toDate() - earliestRequestTime.toDate();
                         waitTime = Math.ceil((waitTime / 1000) / 60);
                         waitTime = waitTime + " minutes";
